@@ -1,8 +1,9 @@
 /.phpunit.cache
 /node_modules
-/public/build
+!/public/build
 /public/hot
 /public/storage
+!/public/tailadmin/src/
 /storage/*.key
 /storage/pail
 /vendor
