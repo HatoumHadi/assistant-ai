@@ -1,0 +1,142 @@
+import Chart from "react-apexcharts";
+import { ApexOptions } from "apexcharts";
+import { useState } from "react";
+import { Dropdown } from "../ui/dropdown/Dropdown";
+import { DropdownItem } from "../ui/dropdown/DropdownItem";
+import { MoreDotIcon } from "../../icons";
+
+type RangeKey = "Monthly" | "Quarterly" | "Annually";
+
+const chartData: Record<RangeKey, { x: string; y: number }[]> = {
+    Monthly: [
+        { x: "Jul '25", y: 34 },
+        { x: "15 Jul", y: 35 },
+        { x: "Aug '25", y: 33 },
+        { x: "15 Aug", y: 32 },
+        { x: "Sep '25", y: 31 },
+        { x: "15 Sep", y: 30 },
+        { x: "Oct '25", y: 32 },
+        { x: "15 Oct", y: 30 },
+        { x: "Nov '25", y: 31 },
+    ],
+    Quarterly: [
+        { x: "Q1 '25", y: 38 },
+        { x: "Q2 '25", y: 35 },
+        { x: "Q3 '25", y: 32 },
+        { x: "Q4 '25", y: 30 },
+    ],
+    Annually: [
+        { x: "2022", y: 40 },
+        { x: "2023", y: 36 },
+        { x: "2024", y: 34 },
+        { x: "2025", y: 31 },
+    ],
+};
+
+export const PortfolioPerformance = () => {
+    const [selectedRange, setSelectedRange] = useState<RangeKey>("Monthly");
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => setDropdownOpen((prev) => !prev);
+    const closeDropdown = () => setDropdownOpen(false);
+
+    const options: ApexOptions = {
+        chart: {
+            type: "area",
+            toolbar: { show: false },
+            zoom: { enabled: false },
+        },
+        dataLabels: { enabled: false },
+        stroke: {
+            curve: "smooth",
+            width: 2,
+            colors: ["#3b82f6"],
+        },
+        fill: {
+            type: "gradient",
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.4,
+                opacityTo: 0,
+                stops: [0, 90, 100],
+            },
+        },
+        xaxis: {
+            type: "category",
+            labels: { style: { fontSize: "12px" } },
+        },
+        yaxis: {
+            min: 28,
+            max: 40,
+            tickAmount: 6,
+            labels: {
+                formatter: (val) => `${val.toFixed(2)}`,
+            },
+        },
+        tooltip: {
+            y: {
+                formatter: (val) => `${val.toFixed(2)}`,
+            },
+        },
+    };
+
+    const series = [
+        {
+            name: "Performance",
+            data: chartData[selectedRange],
+        },
+    ];
+
+    return (
+        <div className="bg-white rounded-2xl shadow p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+            <div className="flex justify-between items-start mb-4">
+                <div>
+                    <h2 className="text-xl font-semibold dark:text-white">Portfolio Performance</h2>
+                    <p className="text-sm text-gray-500 dark:text-white">
+                        Here is your performance stats of each month
+                    </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <div className="relative inline-block text-left">
+                        <button
+                            onClick={toggleDropdown}
+                            className="bg-gray-100 px-3 py-1 rounded-md text-sm"
+                        >
+                            {selectedRange}
+                        </button>
+
+                        <Dropdown isOpen={dropdownOpen} onClose={closeDropdown}>
+                            <div className="absolute mt-2 w-36 rounded-md bg-white shadow-lg z-10">
+                                {(["Monthly", "Quarterly", "Annually"] as RangeKey[]).map(
+                                    (range) => (
+                                        <DropdownItem
+                                            key={range}
+                                            onClick={() => {
+                                                setSelectedRange(range);
+                                                closeDropdown();
+                                            }}
+                                        >
+                                            {range}
+                                        </DropdownItem>
+                                    )
+                                )}
+                            </div>
+                        </Dropdown>
+                    </div>
+
+                    <button className="p-2 hover:bg-gray-100 rounded-md">
+                        <MoreDotIcon />
+                    </button>
+                </div>
+            </div>
+
+            <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={300}
+                width="100%"
+            />
+        </div>
+    );
+};
