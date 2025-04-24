@@ -68,9 +68,15 @@ class ChatController extends Controller
 
                         $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
 
-                        Excel::store(new ReportExport($parsedData), $path, 'public');
+                        // Generate Excel file
+                        $export = new ReportExport($parsedData);
+                        $filePath = storage_path('app/public/' . $path);
+                        Excel::store($export, $path, 'public');
 
-                        return Excel::download(new ReportExport($parsedData), 'report.xlsx');
+                        // In your chatFn method, where you return the file:
+                        return response()->download($filePath, 'report.xlsx', [
+                            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        ]);
                     } else {
                         return response()->json([
                             'success' => true,
