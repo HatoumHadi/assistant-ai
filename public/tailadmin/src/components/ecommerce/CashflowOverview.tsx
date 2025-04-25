@@ -4,54 +4,29 @@ import ChartTab from "../common/ChartTab";
 
 export default function StatisticsChart() {
     const options: ApexOptions = {
-        legend: {
-            show: false,
-            position: "top",
-            horizontalAlign: "left",
-        },
-        colors: ["#465FFF"],
         chart: {
-            fontFamily: "Outfit, sans-serif",
+            type: "area",
             height: 310,
-            type: "line",
             toolbar: {
                 show: false,
             },
+            fontFamily: "Outfit, sans-serif",
         },
-        stroke: {
-            curve: "straight",
-            width: [2],
-        },
-        fill: {
-            type: "solid", // changed from gradient to solid for a cleaner line chart
-        },
-        markers: {
-            size: 0,
-            strokeColors: "#fff",
-            strokeWidth: 2,
-            hover: {
-                size: 6,
-            },
-        },
-        grid: {
-            xaxis: {
-                lines: {
-                    show: false,
-                },
-            },
-            yaxis: {
-                lines: {
-                    show: true,
-                },
-            },
-        },
+        colors: ["#10B981"], // a greenish color for cashflow
         dataLabels: {
             enabled: false,
         },
-        tooltip: {
-            enabled: true,
-            x: {
-                format: "dd MMM yyyy",
+        stroke: {
+            curve: "smooth",
+            width: 2,
+        },
+        fill: {
+            type: "gradient",
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.4,
+                opacityTo: 0,
+                stops: [0, 90, 100],
             },
         },
         xaxis: {
@@ -66,9 +41,6 @@ export default function StatisticsChart() {
             axisTicks: {
                 show: false,
             },
-            tooltip: {
-                enabled: false,
-            },
         },
         yaxis: {
             labels: {
@@ -77,19 +49,33 @@ export default function StatisticsChart() {
                     colors: ["#6B7280"],
                 },
             },
-            title: {
-                text: "",
-                style: {
-                    fontSize: "0px",
+        },
+        tooltip: {
+            x: {
+                format: "MMM",
+            },
+        },
+        grid: {
+            xaxis: {
+                lines: {
+                    show: false,
                 },
             },
+            yaxis: {
+                lines: {
+                    show: true,
+                },
+            },
+        },
+        legend: {
+            show: false,
         },
     };
 
     const series = [
         {
-            name: "Sales",
-            data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235],
+            name: "Cashflow",
+            data: [12000, 15000, 13000, 14000, 18000, 20000, 17000, 16000, 19000, 21000, 22000, 25000],
         },
     ];
 
@@ -98,10 +84,10 @@ export default function StatisticsChart() {
             <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
                 <div className="w-full">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        Sales trends
+                        Cashflow overview
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Target you’ve set for each month
+                        Monthly cash inflow and outflow trends
                     </p>
                 </div>
                 <div className="flex items-start w-full gap-3 sm:justify-end">
@@ -111,7 +97,7 @@ export default function StatisticsChart() {
 
             <div className="max-w-full overflow-x-auto custom-scrollbar">
                 <div className="min-w-[1000px] xl:min-w-full">
-                    <Chart options={options} series={series} type="line" height={310} />
+                    <Chart options={options} series={series} type="area" height={310} />
                 </div>
             </div>
         </div>

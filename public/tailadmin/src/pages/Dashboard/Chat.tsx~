@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import PageMeta from "../../components/common/PageMeta";
 
-
-
 export default function Chat() {
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState<{ sender: string; text: string; fileUrl?: string; fileName?: string }[]>([]);

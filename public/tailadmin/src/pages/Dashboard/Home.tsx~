@@ -40,16 +40,16 @@ export default function Home() {
                     <StatisticsChart/>
                 </div>
 
-                <div className="col-span-12">
+                <div className="col-span-12 xl:col-span-7">
                     <InventoryStatus/>
                 </div>
-                <div className="col-span-12">
+                <div className="col-span-12 xl:col-span-7">
                     <CashflowOverview/>
                 </div>
-                <div className="col-span-12">
+                <div className="col-span-12 xl:col-span-7">
                     <BestSellingItems/>
                 </div>
-                <div className="col-span-12">
+                <div className="col-span-12 xl:col-span-7">
                     <KpiIndicators/>
                 </div>
             </div>
