@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="{{asset('tailadmin/build/favicon.png')}}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" crossorigin src="{{asset('tailadmin/build/assets/index-Dq2tIp0D.js')}}"></script>
+    <script type="module" crossorigin src="{{asset('tailadmin/build/assets/index-BuNFyZHh.js')}}"></script>
     <link rel="stylesheet" crossorigin href="{{asset('tailadmin/build/assets/index-CW2BEXhn.css')}}">
 </head>
 <body class="dark:bg-gray-900">
