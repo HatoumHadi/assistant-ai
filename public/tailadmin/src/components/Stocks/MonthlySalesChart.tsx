@@ -95,7 +95,7 @@ export default function TrendingStocks() {
                             <button className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-100 dark:text-white dark:border-gray-500">
                                 Short Stock
                             </button>
-                            <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 dark:text-white">
+                            <button className="flex-1 px-4 py-2 bg-[#12baab] text-white rounded-md text-sm font-medium hover:bg-[#2bcbba] dark:text-white">
                                 Buy Stock
                             </button>
                         </div>

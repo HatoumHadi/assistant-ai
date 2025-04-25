@@ -122,7 +122,7 @@ export default function Chat() {
                                 <div
                                     className={`px-4 py-2 rounded-lg max-w-[70%] text-sm leading-relaxed ${
                                         msg.sender === "user"
-                                            ? "bg-blue-600 text-white"
+                                            ? "bg-[#12baab] text-white"
                                             : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white"
                                     }`}
                                 >
@@ -154,11 +154,11 @@ export default function Chat() {
                             onChange={(e) => setInput(e.target.value)}
                             onKeyPress={handleKeyPress}
                             placeholder="Type your message..."
-                            className="flex-1 p-3 rounded-l-lg border border-gray-300 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                            className="flex-1 p-3 rounded-l-lg border border-gray-300 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-[#12baab] dark:bg-gray-800 dark:text-white"
                         />
                         <button
                             onClick={sendMessage}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-r-lg"
+                            className="bg-[#12baab] hover:bg-[#12baab] text-white px-4 py-3 rounded-r-lg"
                         >
                             Send
                         </button>

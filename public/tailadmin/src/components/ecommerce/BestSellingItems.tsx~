@@ -12,7 +12,7 @@ export default function StatisticsChart() {
             },
             fontFamily: "Outfit, sans-serif",
         },
-        colors: ["#12baab"], // blue for best-selling items
+        colors: ["#3B82F6"], // blue for best-selling items
         plotOptions: {
             bar: {
                 borderRadius: 6,

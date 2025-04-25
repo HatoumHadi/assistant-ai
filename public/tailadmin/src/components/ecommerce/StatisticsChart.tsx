@@ -9,7 +9,7 @@ export default function StatisticsChart() {
             position: "top",
             horizontalAlign: "left",
         },
-        colors: ["#465FFF"],
+        colors: ["#12baab"],
         chart: {
             fontFamily: "Outfit, sans-serif",
             height: 310,

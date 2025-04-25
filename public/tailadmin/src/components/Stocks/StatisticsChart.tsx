@@ -50,7 +50,16 @@ export const PortfolioPerformance = () => {
         stroke: {
             curve: "smooth",
             width: 2,
-            colors: ["#3b82f6"],
+            colors: ["#12baab"],
+        },
+        markers: {
+            size: 5,
+            colors: ["#12baab"],        // Point color
+            strokeColors: "#fff",
+            strokeWidth: 2,
+            hover: {
+                size: 7,
+            },
         },
         fill: {
             type: "gradient",
@@ -74,6 +83,9 @@ export const PortfolioPerformance = () => {
             },
         },
         tooltip: {
+            marker: {
+                fillColors: ["#12baab"], // Tooltip point color
+            },
             y: {
                 formatter: (val) => `${val.toFixed(2)}`,
             },
@@ -88,38 +100,38 @@ export const PortfolioPerformance = () => {
     ];
 
     return (
-        <div className="bg-white rounded-2xl shadow p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-            <div className="flex justify-between items-start mb-4">
+        <div className="bg-white rounded-2xl shadow p-6 dark:border-gray-800 dark:bg-white/[0.03] w-full max-w-full overflow-hidden">
+            <div className="flex flex-wrap justify-between items-start mb-4 gap-4">
                 <div>
                     <h2 className="text-xl font-semibold dark:text-white">Portfolio Performance</h2>
                     <p className="text-sm text-gray-500 dark:text-white">
                         Here is your performance stats of each month
                     </p>
                 </div>
-                <div className="flex items-center space-x-2">
-                    <div className="relative inline-block text-left">
+
+                <div className="flex items-center gap-2">
+                    <div className="relative w-[120px]">
                         <button
                             onClick={toggleDropdown}
-                            className="bg-gray-100 px-3 py-1 rounded-md text-sm"
+                            className="px-3 py-1 rounded-md text-sm text-white w-full"
+                            style={{ backgroundColor: "#12baab" }}
                         >
                             {selectedRange}
                         </button>
 
                         <Dropdown isOpen={dropdownOpen} onClose={closeDropdown}>
                             <div className="absolute mt-2 w-36 rounded-md bg-white shadow-lg z-10">
-                                {(["Monthly", "Quarterly", "Annually"] as RangeKey[]).map(
-                                    (range) => (
-                                        <DropdownItem
-                                            key={range}
-                                            onClick={() => {
-                                                setSelectedRange(range);
-                                                closeDropdown();
-                                            }}
-                                        >
-                                            {range}
-                                        </DropdownItem>
-                                    )
-                                )}
+                                {(["Monthly", "Quarterly", "Annually"] as RangeKey[]).map((range) => (
+                                    <DropdownItem
+                                        key={range}
+                                        onClick={() => {
+                                            setSelectedRange(range);
+                                            closeDropdown();
+                                        }}
+                                    >
+                                        {range}
+                                    </DropdownItem>
+                                ))}
                             </div>
                         </Dropdown>
                     </div>
