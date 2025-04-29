@@ -1,17 +1,22 @@
 import { useState, useRef, useEffect } from "react";
 import PageMeta from "../../components/common/PageMeta";
+import { FiMic } from "react-icons/fi";
 
 export default function Chat() {
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState<{ sender: string; text: string; fileUrl?: string; fileName?: string }[]>([]);
     const [loading, setLoading] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+    const [recordTime, setRecordTime] = useState(0); // in seconds
+    const recorderRef = useRef<MediaRecorder | null>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+    const recordInterval = useRef<NodeJS.Timeout | null>(null);
+
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const storedMessages = sessionStorage.getItem("chatMessages");
-        if (storedMessages) {
-            setMessages(JSON.parse(storedMessages));
-        }
+        if (storedMessages) setMessages(JSON.parse(storedMessages));
     }, []);
 
     useEffect(() => {
@@ -34,64 +39,24 @@ export default function Chat() {
         try {
             const response = await fetch("http://127.0.0.1:8000/api/chat", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ message: input }),
             });
 
-            if (response.headers.get('content-type')?.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+            if (response.headers.get("content-type")?.includes("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
                 const blob = await response.blob();
                 const fileUrl = URL.createObjectURL(blob);
-
                 setMessages((prev) => [
                     ...prev,
-                    {
-                        sender: "bot",
-                        text: "Here's your report:",
-                        fileUrl: fileUrl,
-                        fileName: "report.xlsx"
-                    },
+                    { sender: "bot", text: "Here's your report:", fileUrl, fileName: "report.xlsx" }
                 ]);
             } else {
                 const data = await response.json();
-
-                if (data.success) {
-                    const replyText = data.reply;
-
-                    // Check if there's a file link inside the text
-                    const linkRegex = /\[.*?\]\((.*?)\)/;
-                    const match = replyText.match(linkRegex);
-
-                    if (match) {
-                        const fileUrl = match[1];
-                        setMessages((prev) => [
-                            ...prev,
-                            {
-                                sender: "bot",
-                                text: replyText.replace(linkRegex, "").trim(), // Remove the [here](link) part from text
-                                fileUrl: fileUrl,
-                                fileName: fileUrl.split("/").pop() || "report.xlsx"
-                            },
-                        ]);
-                    } else {
-                        setMessages((prev) => [
-                            ...prev,
-                            { sender: "bot", text: replyText }
-                        ]);
-                    }
-                } else {
-                    setMessages((prev) => [
-                        ...prev,
-                        { sender: "bot", text: data.error || "❌ Something went wrong. Try again." }
-                    ]);
-                }
+                const replyText = data.reply;
+                setMessages((prev) => [...prev, { sender: "bot", text: replyText }]);
             }
-        } catch (error) {
-            setMessages((prev) => [
-                ...prev,
-                { sender: "bot", text: "❌ Something went wrong. Try again." },
-            ]);
+        } catch {
+            setMessages((prev) => [...prev, { sender: "bot", text: "❌ Something went wrong. Try again." }]);
         } finally {
             setLoading(false);
         }
@@ -102,7 +67,7 @@ export default function Chat() {
     };
 
     const downloadFile = (fileUrl: string, fileName: string) => {
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = fileUrl;
         link.download = fileName;
         document.body.appendChild(link);
@@ -110,12 +75,104 @@ export default function Chat() {
         document.body.removeChild(link);
     };
 
+    const formatTime = (seconds: number): string => {
+        const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+        const s = (seconds % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+    };
+
+
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const chunks: Blob[] = [];
+            const recorder = new MediaRecorder(stream);
+
+            recorderRef.current = recorder;
+            streamRef.current = stream;
+
+            setIsRecording(true);
+            setRecordTime(0);
+
+            recorder.ondataavailable = (e) => {
+                chunks.push(e.data);
+            };
+
+            recorder.onstop = async () => {
+                // Here we are using 'chunks' to create the audio Blob
+                const blob = new Blob(chunks, { type: "audio/webm" });
+
+                // Now using the 'blob' instead of 'recordedBlob'
+                const formData = new FormData();
+                formData.append("audio", blob, "voice-message.webm");
+
+                setMessages((prev) => [...prev, { sender: "user", text: "[Voice Message]" }]);
+                setLoading(true);
+
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/api/voice", {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    const contentType = response.headers.get("content-type");
+
+                    if (!contentType?.includes("application/json")) {
+                        const text = await response.text();
+                        throw new Error(`Expected JSON, got: ${text.slice(0, 100)}...`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+                    } else {
+                        setMessages((prev) => [...prev, { sender: "bot", text: data.error || "❌ Something went wrong with voice processing." }]);
+                    }
+                } catch (error) {
+                    console.error("Voice send error", error);
+                    setMessages((prev) => [...prev, { sender: "bot", text: "❌ Failed to send voice message." }]);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            recorder.start();
+
+            recordInterval.current = setInterval(() => {
+                setRecordTime((prev) => {
+                    if (prev >= 59) {
+                        stopRecording();
+                        return 60;
+                    }
+                    return prev + 1;
+                });
+            }, 1000);
+
+        } catch (err) {
+            console.error("Microphone access denied or error:", err);
+            setIsRecording(false);
+        }
+    };
+
+
+
+    const stopRecording = () => {
+        if (recorderRef.current && recorderRef.current.state !== "inactive") {
+            recorderRef.current.stop();
+        }
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach((track) => track.stop());
+        }
+        setIsRecording(false);
+        if (recordInterval.current) {
+            clearInterval(recordInterval.current);
+        }
+    };
+
     return (
         <>
-            <PageMeta
-                title="AI Chat | TailAdmin"
-                description="Ask questions and get AI responses on this page."
-            />
+            <PageMeta title="AI Chat | TailAdmin" description="Ask questions and get AI responses on this page." />
             <div className="grid grid-cols-12 gap-4 md:gap-6">
                 <div className="col-span-12 md:col-span-8 md:col-start-3 bg-white dark:bg-gray-900 shadow-md rounded-xl h-[80vh] flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800">
                     {/* Header */}
@@ -126,24 +183,12 @@ export default function Chat() {
                     {/* Messages */}
                     <div className="flex-1 overflow-y-auto px-4 py-2 space-y-3 bg-gray-50 dark:bg-gray-900">
                         {messages.map((msg, index) => (
-                            <div
-                                key={index}
-                                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-                            >
-                                <div
-                                    className={`px-4 py-2 rounded-lg max-w-[70%] text-sm leading-relaxed ${
-                                        msg.sender === "user"
-                                            ? "bg-[#12baab] text-white"
-                                            : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white"
-                                    }`}
-                                >
+                            <div key={index} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                                <div className={`px-4 py-2 rounded-lg max-w-[70%] text-sm leading-relaxed ${msg.sender === "user" ? "bg-[#12baab] text-white" : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white"}`}>
                                     <div>{msg.text}</div>
                                     {msg.fileUrl && (
                                         <div className="mt-2">
-                                            <button
-                                                onClick={() => downloadFile(msg.fileUrl!, msg.fileName || "report.xlsx")}
-                                                className="text-blue-600 dark:text-blue-400 hover:underline"
-                                            >
+                                            <button onClick={() => downloadFile(msg.fileUrl!, msg.fileName || "report.xlsx")} className="text-blue-600 dark:text-blue-400 hover:underline">
                                                 Download Report
                                             </button>
                                         </div>
@@ -151,26 +196,32 @@ export default function Chat() {
                                 </div>
                             </div>
                         ))}
-                        {loading && (
-                            <div className="text-gray-500 italic text-sm">AI is typing...</div>
-                        )}
+                        {loading && <div className="text-gray-500 italic text-sm">AI is typing...</div>}
                         <div ref={messagesEndRef} />
                     </div>
 
-                    {/* Input */}
-                    <div className="p-4 bg-white dark:bg-gray-900 dark:text-white border-t border-gray-300 dark:border-gray-800 flex items-center">
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                            placeholder="Type your message..."
-                            className="flex-1 p-3 rounded-l-lg border border-gray-300 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-[#12baab] dark:bg-gray-800 dark:text-white"
-                        />
-                        <button
-                            onClick={sendMessage}
-                            className="bg-[#12baab] hover:bg-[#12baab] text-white px-4 py-3 rounded-r-lg"
-                        >
+                    {/* Input + Mic */}
+                    <div className="p-4 bg-white dark:bg-gray-900 dark:text-white border-t border-gray-300 dark:border-gray-800 flex items-center gap-2">
+                        {isRecording ? (
+                            <div className="flex-1 px-4 py-3 bg-gray-400 dark:bg-gray-800 rounded-lg text-gray-800 dark:text-white text-sm">
+                                🎙️ Recording... {formatTime(recordTime)}
+                            </div>
+                        ) : (
+                            <input
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                placeholder="Type your message..."
+                                className="flex-1 p-3 rounded-lg border border-gray-300 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-[#12baab] dark:bg-gray-800 dark:text-white"
+                            />
+                        )}
+
+                        <button onClick={isRecording ? stopRecording : startRecording} className={`p-3 rounded-lg ${isRecording ? "bg-red-500" : "bg-black dark:bg-gray-700"} text-white hover:opacity-80 focus:outline-none`} disabled={loading} title={isRecording ? "Stop Recording" : "Start Recording"}>
+                            <FiMic size={18} />
+                        </button>
+
+                        <button onClick={sendMessage} disabled={isRecording || loading} className="bg-[#12baab] hover:bg-[#12baab] text-white px-4 py-3 rounded-lg disabled:opacity-50">
                             Send
                         </button>
                     </div>

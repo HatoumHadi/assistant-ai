@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ReportExport;
 use Illuminate\Support\Str;
@@ -24,7 +26,6 @@ class ChatController extends Controller
                             Furthermore, a breakdown of **company-wise revenue performance** shows positive momentum for most top-performing brands. Apple Inc., Tesla Inc., and Amazon.com Inc. each recorded an 11.01% increase in their revenue, contributing $1,232, $1,232, and $2,567 respectively. These strong performances reflect solid market demand and brand loyalty. On the other hand, PayPal Inc. experienced a 9.05% decline, pulling in $965, which could signal a dip in transactional volume or customer usage, possibly requiring strategic reassessment.
                             From an **investment standpoint**, portfolio performance showed some fluctuation between July and November 2025. After an initial increase mid-July, a decline was observed through August and September, with some recovery seen in early October. The portfolio appears to be stabilizing near the $32–$33 range, hinting at resilience in the face of broader market trends. This performance can be linked to strategic stock moves highlighted in the **Trending Stocks** section: Tesla (TSLA) and Apple (AAPL) both show gains at $192.53, with increases of 1.01% and 3.59%, respectively. Spotify (SPOT) also rose by 2.11%, priced at $130.22. These upward trends align with the companies’ contributions to revenue and suggest strong investment confidence, supporting continued market optimism for the near term.
                             This comprehensive view paints a picture of a thriving business with upward momentum, customer loyalty, diversified revenue streams, solid stock performance, and clear opportunities for further growth and operational refinement. Key insights from visual data include the strong performance of Printer AI as the best-selling product and the positive cashflow trend that consistently remained above warning thresholds, peaking at $26,000 in December.';
-
 
 
     public function chatFn(Request $request)
@@ -170,4 +171,183 @@ class ChatController extends Controller
     {
         return trim(preg_replace('/^```php|^```|^php|\s*```$/m', '', trim($response)));
     }
+
+
+//    public function handleVoice(Request $request)
+//    {
+//        $request->validate([
+//            'voice' => 'required|file|mimetypes:audio/mpeg,audio/wav,audio/mp4,audio/x-m4a',
+//        ]);
+//
+//        $api_key_open_ai = config('services.openai.api_key_1');
+//        $context = "This is the provided business data:\n\n" . $this->longTextVar;
+//
+//        // Store the voice file temporarily
+//        $path = $request->file('voice')->store('temp');
+//        $file = Storage::path($path);
+//
+//        // Transcribe using Whisper
+//        $response = Http::withToken($api_key_open_ai)->attach(
+//            'file', fopen($file, 'r'), basename($file)
+//        )->asMultipart()->post('https://api.openai.com/v1/audio/transcriptions', [
+//            'model' => 'whisper-1',
+//        ]);
+//
+//        // Delete temp file
+//        Storage::delete($path);
+//
+//        if (!$response->ok() || !isset($response['text'])) {
+//            Log::error('Transcription failed', ['response' => $response->json()]);
+//            return response()->json([
+//                'success' => false,
+//                'message' => '❌ Failed to transcribe the voice message.'
+//            ], 500);
+//        }
+//
+//        $transcribedText = $response['text'];
+//        Log::info('Transcription success', ['text' => $transcribedText]);
+//
+//        // Prepare system message
+//        $systemMessage = "You are a helpful assistant named Mark.
+//        When the user greets you (e.g., 'hello', 'hi'), always start your response with: 'I am Mark, how can I help you? just if the input message contain greets words.'
+//        not every response mention this message 'I am Mark, how can I help you?'.
+//        without mention this string 'PHP-style array' in response.
+//        If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
+//        Otherwise, use the business data to intelligently answer user questions.
+//        Always be friendly and identify yourself as Mark.";
+//
+//        $messages = [
+//            ['role' => 'system', 'content' => $systemMessage],
+//            ['role' => 'user', 'content' => "User input: $transcribedText\n\nBusiness Data:\n$context"],
+//        ];
+//
+//        // Send to GPT
+//        $chatResponse = Http::withHeaders([
+//            'Authorization' => 'Bearer ' . $api_key_open_ai,
+//            'Content-Type' => 'application/json',
+//        ])->post('https://api.openai.com/v1/chat/completions', [
+//            'model' => 'gpt-4o',
+//            'messages' => $messages,
+//            'temperature' => 1,
+//            'max_tokens' => 500,
+//            'top_p' => 1,
+//            'frequency_penalty' => 0,
+//            'presence_penalty' => 0,
+//        ]);
+//
+//        if (!$chatResponse->ok() || !isset($chatResponse['choices'][0]['message']['content'])) {
+//            Log::error('Chat API failed', ['response' => $chatResponse->json()]);
+//            return response()->json([
+//                'success' => false,
+//                'message' => '❌ Failed to get a response from GPT.'
+//            ], 500);
+//        }
+//
+//        $finalResponse = $chatResponse['choices'][0]['message']['content'];
+//        Log::info('GPT response success', ['response' => $finalResponse]);
+//
+//        return response()->json([
+//            'success' => true,
+//            'transcription' => $transcribedText,
+//            'response' => $finalResponse,
+//        ]);
+//    }
+
+
+    public function handleVoice(Request $request)
+    {
+        $apiKey4 = config('services.openai.api_key_1');
+
+        if (!$request->hasFile('audio')) {
+            return response()->json([
+                'success' => false,
+                'error' => 'No audio file received.',
+            ], 400);
+        }
+
+        try {
+            $audioFile = $request->file('audio');
+
+
+            if (!$audioFile) {
+                return response()->json(['success' => false, 'error' => 'No audio file received.'], 400);
+            }
+
+
+            Log::info('Audio file info', [
+                'valid' => $audioFile->isValid(),
+                'originalName' => $audioFile->getClientOriginalName(),
+                'mime' => $audioFile->getMimeType(),
+                'size' => $audioFile->getSize(),
+                'realPath' => $audioFile->getRealPath()
+            ]);
+
+            Storage::makeDirectory('temp');
+
+            $fileName = uniqid() . '.webm';
+            $fullPath = storage_path('app/temp/' . $fileName);
+            copy($audioFile->getRealPath(), $fullPath);
+
+            if (!file_exists($fullPath)) {
+                Log::info('Failed to save audio file', ['response' => $fullPath]);
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Failed to save audio file.',
+                ]);
+            }
+
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $apiKey4,
+            ])->attach(
+                'file',
+                file_get_contents($fullPath),
+                'voice-message.webm', // filename
+                ['Content-Type' => 'audio/webm'] // specify MIME type manually
+            )->post('https://api.openai.com/v1/audio/transcriptions', [
+                'model' => 'whisper-1',
+            ]);
+
+
+            if ($response->successful()) {
+                $transcription = $response->json()['text'];
+
+                $chat = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $apiKey4,
+                ])->post('https://api.openai.com/v1/chat/completions', [
+                    'model' => 'gpt-4',
+                    'messages' => [
+                        ['role' => 'user', 'content' => $transcription],
+                    ],
+                ]);
+
+                if ($chat->successful()) {
+                    return response()->json([
+                        'success' => true,
+                        'reply' => $chat->json()['choices'][0]['message']['content'],
+                    ]);
+                } else {
+                    return response()->json(['success' => false, 'error' => '❌ Failed to generate response from OpenAI.']);
+                }
+            } else {
+                Log::info('Transcription error', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'error' => '❌ Failed to transcribe audio.',
+                ]);
+            }
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Exception occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }
