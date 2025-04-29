@@ -1,15 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import PageMeta from "../../components/common/PageMeta";
 
-
+interface Message {
+    sender: string;
+    text: string;
+    fileUrl?: string;
+    fileName?: string;
+}
 
 export default function Chat() {
     const [input, setInput] = useState("");
-    const [messages, setMessages] = useState<{ sender: string; text: string; fileUrl?: string; fileName?: string }[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    // Load messages from sessionStorage on initial load
     useEffect(() => {
         const storedMessages = sessionStorage.getItem("chatMessages");
         if (storedMessages) {
@@ -17,7 +21,6 @@ export default function Chat() {
         }
     }, []);
 
-    // Save messages to sessionStorage on update
     useEffect(() => {
         sessionStorage.setItem("chatMessages", JSON.stringify(messages));
         scrollToBottom();
@@ -28,9 +31,9 @@ export default function Chat() {
     };
 
     const sendMessage = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() || loading) return;
 
-        const userMessage = { sender: "user", text: input };
+        const userMessage: Message = { sender: "user", text: input };
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
         setLoading(true);
@@ -44,7 +47,9 @@ export default function Chat() {
                 body: JSON.stringify({ message: input }),
             });
 
-            if (response.headers.get('content-type')?.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+            const contentType = response.headers.get("content-type");
+
+            if (contentType?.includes("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
                 const blob = await response.blob();
                 const fileUrl = URL.createObjectURL(blob);
 
@@ -53,24 +58,20 @@ export default function Chat() {
                     {
                         sender: "bot",
                         text: "Here's your report:",
-                        fileUrl: fileUrl,
-                        fileName: "report.xlsx"
+                        fileUrl,
+                        fileName: "report.xlsx",
                     },
                 ]);
             } else {
                 const data = await response.json();
 
-                if (data.success) {
-                    setMessages((prev) => [
-                        ...prev,
-                        { sender: "bot", text: data.reply }
-                    ]);
-                } else {
-                    setMessages((prev) => [
-                        ...prev,
-                        { sender: "bot", text: data.error || "❌ Something went wrong. Try again." }
-                    ]);
-                }
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        sender: "bot",
+                        text: data.success ? data.reply : data.error || "❌ Something went wrong. Try again.",
+                    },
+                ]);
             }
         } catch (error) {
             setMessages((prev) => [
@@ -82,12 +83,12 @@ export default function Chat() {
         }
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") sendMessage();
     };
 
     const downloadFile = (fileUrl: string, fileName: string) => {
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = fileUrl;
         link.download = fileName;
         document.body.appendChild(link);
@@ -96,7 +97,7 @@ export default function Chat() {
 
         setTimeout(() => {
             URL.revokeObjectURL(fileUrl);
-        }, 100);
+        }, 500);
     };
 
     return (
@@ -152,13 +153,14 @@ export default function Chat() {
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            onKeyPress={handleKeyPress}
+                            onKeyDown={handleKeyDown}
                             placeholder="Type your message..."
-                            className="flex-1 p-3 rounded-l-lg border border-gray-300 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                            className="flex-1 p-3 rounded-l-lg border border-gray-300 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-[#12baab] dark:bg-gray-800 dark:text-white"
                         />
                         <button
                             onClick={sendMessage}
-                            className="bg-[#12baab] hover:bg-[#12baab] text-white px-4 py-3 rounded-r-lg"
+                            disabled={loading}
+                            className="bg-[#12baab] hover:bg-[#12baab] text-white px-4 py-3 rounded-r-lg disabled:opacity-50"
                         >
                             Send
                         </button>

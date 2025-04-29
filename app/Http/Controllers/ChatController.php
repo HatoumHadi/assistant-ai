@@ -25,6 +25,8 @@ class ChatController extends Controller
                             From an **investment standpoint**, portfolio performance showed some fluctuation between July and November 2025. After an initial increase mid-July, a decline was observed through August and September, with some recovery seen in early October. The portfolio appears to be stabilizing near the $32–$33 range, hinting at resilience in the face of broader market trends. This performance can be linked to strategic stock moves highlighted in the **Trending Stocks** section: Tesla (TSLA) and Apple (AAPL) both show gains at $192.53, with increases of 1.01% and 3.59%, respectively. Spotify (SPOT) also rose by 2.11%, priced at $130.22. These upward trends align with the companies’ contributions to revenue and suggest strong investment confidence, supporting continued market optimism for the near term.
                             This comprehensive view paints a picture of a thriving business with upward momentum, customer loyalty, diversified revenue streams, solid stock performance, and clear opportunities for further growth and operational refinement. Key insights from visual data include the strong performance of Printer AI as the best-selling product and the positive cashflow trend that consistently remained above warning thresholds, peaking at $26,000 in December.';
 
+
+
     public function chatFn(Request $request)
     {
         $request->validate([
@@ -34,33 +36,23 @@ class ChatController extends Controller
         $message = $request->input('message');
 
         try {
-
             $api_key_open_ai = config('services.openai.api_key_1');
 
-            $context = "This is the provided data to used for generate answer :\n\n" . $this->longTextVar;
+            $isReportRequest = $this->isReportRequest($message);
 
-            $systemMessage = "You are a helpful assistant.
-                                If the user's first message is a greeting such as 'hello', 'hi', or similar, respond with: 'I am Mark, how can I help you?'
-                                Answer the user's input clearly and concisely. If the user requests a report,
-                                generate the report as a data array format.
-                                If the user asks for a report or table,
-                                respond with a PHP-style array string structured as:
-                                ['header' => [...], 'data' => [[...], [...]]] —
-                                where header contains column names and data contains the rows.
-                                Only include the necessary data, without any extra content.
-                                Do not ask the user if they want a report;
-                                if a report is not requested, respond appropriately based on the input.";
+            $context = "This is the provided business data:\n\n" . $this->longTextVar;
 
+            $systemMessage = "You are a helpful assistant named Mark.
+            When the user greets you (e.g., 'hello', 'hi'), always start your response with: 'I am Mark, how can I help you? just if the input message contain greets words.'
+            not every response mention this message 'I am Mark, how can I help you?'.
+            without mention this string 'PHP-style array' in response.
+            If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
+            Otherwise, use the business data to intelligently answer user questions.
+            Always be friendly and identify yourself as Mark.";
 
             $messages = [
-                [
-                    'role' => 'system',
-                    'content' => $systemMessage,
-                ],
-                [
-                    'role' => 'user',
-                    'content' => "User input: $message\n\nBusiness Data:\n$context",
-                ],
+                ['role' => 'system', 'content' => $systemMessage],
+                ['role' => 'user', 'content' => "User input: $message\n\nBusiness Data:\n$context"],
             ];
 
             $response = Http::withHeaders([
@@ -70,7 +62,7 @@ class ChatController extends Controller
                 'model' => 'gpt-4o',
                 'messages' => $messages,
                 'temperature' => 1,
-                'max_tokens' => 200,
+                'max_tokens' => 500,
                 'top_p' => 1,
                 'frequency_penalty' => 0,
                 'presence_penalty' => 0,
@@ -79,27 +71,40 @@ class ChatController extends Controller
             if ($response->successful()) {
                 $data = $response->json();
                 $content = $data['choices'][0]['message']['content'] ?? null;
+
                 if ($content) {
-                    if ($this->isReport($content)) {
-                        $parsedData = $this->parseBotArrayString($content);
+                    $textResponse = trim($content);
+                    $reportData = null;
 
+                    // If the assistant responded with a PHP array (report format), extract it
+                    $pattern = '/```php(.*?)```/s';
+                    if (preg_match($pattern, $textResponse, $matches)) {
+                        $parsedData = $this->parseBotArrayString($matches[1]);
+
+                        // Generate the report Excel file
                         $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
-
-                        // Generate Excel file
                         $export = new ReportExport($parsedData);
                         $filePath = storage_path('app/public/' . $path);
                         Excel::store($export, $path, 'public');
 
-                        // In your chatFn method, where you return the file:
-                        return response()->download($filePath, 'report.xlsx', [
-                            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        ]);
-                    } else {
-                        return response()->json([
-                            'success' => true,
-                            'reply' => trim($content),
-                        ]);
+                        $reportData = [
+                            'report_path' => asset('storage/' . $path),
+                            'report_filename' => 'report.xlsx',
+                        ];
+
+                        // Remove the PHP array block from the text
+                        $textResponse = preg_replace($pattern, '', $textResponse);
                     }
+
+                    if ($reportData) {
+                        $textResponse .= "\n\nYou can download the report [here]({$reportData['report_path']}).";
+                    }
+
+                    return response()->json([
+                        'success' => true,
+                        'reply' => $textResponse,
+                        'report' => $reportData,
+                    ]);
                 } else {
                     return response()->json([
                         'success' => false,
@@ -110,11 +115,10 @@ class ChatController extends Controller
             } else {
                 return response()->json([
                     'success' => false,
-                    'error' => 'Sorry, something went wrong while communicating with the AI service. Please try again later.',
+                    'error' => 'Error communicating with AI service.',
                     'status_code' => $response->status(),
                 ], $response->status());
             }
-
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Server error: ' . $e->getMessage(),
@@ -122,25 +126,25 @@ class ChatController extends Controller
         }
     }
 
-
-    private function isReport($content)
+    private function isReportRequest(string $message): bool
     {
-        $content = trim($content);
-        $content = preg_replace('/^```php|```$/m', '', $content);
+        $keywords = ['generate report', 'create report', 'report', 'summary', 'export', 'sheet', 'excel'];
+        $lowerMessage = strtolower($message);
 
-        try {
-            $array = eval('return ' . $content . ';');
-
-            return is_array($array) && isset($array['header'], $array['data']) && is_array($array['header']) && is_array($array['data']);
-        } catch (\Throwable $e) {
-            return false;
+        foreach ($keywords as $keyword) {
+            if (Str::contains($lowerMessage, $keyword)) {
+                return true;
+            }
         }
-    }
 
+        return false;
+    }
 
     private function parseBotArrayString(string $arrayString): array
     {
         $arrayString = trim($this->extractArrayContent($arrayString));
+
+        \Log::info('Parsing array string:', ['arrayString' => $arrayString]);
 
         try {
             $evaluated = eval("return $arrayString;");
@@ -149,6 +153,7 @@ class ChatController extends Controller
                 return $evaluated;
             }
         } catch (\Throwable $e) {
+            \Log::error('Error parsing array:', ['error' => $e->getMessage()]);
             return [
                 'header' => [],
                 'data' => [],
@@ -163,7 +168,6 @@ class ChatController extends Controller
 
     private function extractArrayContent($response)
     {
-        $cleaned = preg_replace('/^```php|^```|^php|\s*```$/m', '', trim($response));
-        return trim($cleaned);
+        return trim(preg_replace('/^```php|^```|^php|\s*```$/m', '', trim($response)));
     }
 }

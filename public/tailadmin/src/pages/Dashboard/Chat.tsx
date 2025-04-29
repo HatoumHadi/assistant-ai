@@ -1,15 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import PageMeta from "../../components/common/PageMeta";
 
-
-
 export default function Chat() {
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState<{ sender: string; text: string; fileUrl?: string; fileName?: string }[]>([]);
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    // Load messages from sessionStorage on initial load
     useEffect(() => {
         const storedMessages = sessionStorage.getItem("chatMessages");
         if (storedMessages) {
@@ -17,7 +14,6 @@ export default function Chat() {
         }
     }, []);
 
-    // Save messages to sessionStorage on update
     useEffect(() => {
         sessionStorage.setItem("chatMessages", JSON.stringify(messages));
         scrollToBottom();
@@ -61,10 +57,29 @@ export default function Chat() {
                 const data = await response.json();
 
                 if (data.success) {
-                    setMessages((prev) => [
-                        ...prev,
-                        { sender: "bot", text: data.reply }
-                    ]);
+                    const replyText = data.reply;
+
+                    // Check if there's a file link inside the text
+                    const linkRegex = /\[.*?\]\((.*?)\)/;
+                    const match = replyText.match(linkRegex);
+
+                    if (match) {
+                        const fileUrl = match[1];
+                        setMessages((prev) => [
+                            ...prev,
+                            {
+                                sender: "bot",
+                                text: replyText.replace(linkRegex, "").trim(), // Remove the [here](link) part from text
+                                fileUrl: fileUrl,
+                                fileName: fileUrl.split("/").pop() || "report.xlsx"
+                            },
+                        ]);
+                    } else {
+                        setMessages((prev) => [
+                            ...prev,
+                            { sender: "bot", text: replyText }
+                        ]);
+                    }
                 } else {
                     setMessages((prev) => [
                         ...prev,
@@ -93,10 +108,6 @@ export default function Chat() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
-        setTimeout(() => {
-            URL.revokeObjectURL(fileUrl);
-        }, 100);
     };
 
     return (
@@ -126,7 +137,7 @@ export default function Chat() {
                                             : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white"
                                     }`}
                                 >
-                                    {msg.text}
+                                    <div>{msg.text}</div>
                                     {msg.fileUrl && (
                                         <div className="mt-2">
                                             <button
