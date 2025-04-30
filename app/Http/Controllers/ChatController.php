@@ -77,12 +77,10 @@ class ChatController extends Controller
                     $textResponse = trim($content);
                     $reportData = null;
 
-                    // If the assistant responded with a PHP array (report format), extract it
                     $pattern = '/```php(.*?)```/s';
                     if (preg_match($pattern, $textResponse, $matches)) {
                         $parsedData = $this->parseBotArrayString($matches[1]);
 
-                        // Generate the report Excel file
                         $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
                         $export = new ReportExport($parsedData);
                         $filePath = storage_path('app/public/' . $path);
@@ -93,13 +91,9 @@ class ChatController extends Controller
                             'report_filename' => 'report.xlsx',
                         ];
 
-                        // Remove the PHP array block from the text
                         $textResponse = preg_replace($pattern, '', $textResponse);
                     }
 
-                    if ($reportData) {
-                        $textResponse .= "\n\nYou can download the report [here]({$reportData['report_path']}).";
-                    }
 
                     return response()->json([
                         'success' => true,
@@ -173,89 +167,10 @@ class ChatController extends Controller
     }
 
 
-//    public function handleVoice(Request $request)
-//    {
-//        $request->validate([
-//            'voice' => 'required|file|mimetypes:audio/mpeg,audio/wav,audio/mp4,audio/x-m4a',
-//        ]);
-//
-//        $api_key_open_ai = config('services.openai.api_key_1');
-//        $context = "This is the provided business data:\n\n" . $this->longTextVar;
-//
-//        // Store the voice file temporarily
-//        $path = $request->file('voice')->store('temp');
-//        $file = Storage::path($path);
-//
-//        // Transcribe using Whisper
-//        $response = Http::withToken($api_key_open_ai)->attach(
-//            'file', fopen($file, 'r'), basename($file)
-//        )->asMultipart()->post('https://api.openai.com/v1/audio/transcriptions', [
-//            'model' => 'whisper-1',
-//        ]);
-//
-//        // Delete temp file
-//        Storage::delete($path);
-//
-//        if (!$response->ok() || !isset($response['text'])) {
-//            Log::error('Transcription failed', ['response' => $response->json()]);
-//            return response()->json([
-//                'success' => false,
-//                'message' => '❌ Failed to transcribe the voice message.'
-//            ], 500);
-//        }
-//
-//        $transcribedText = $response['text'];
-//        Log::info('Transcription success', ['text' => $transcribedText]);
-//
-//        // Prepare system message
-//        $systemMessage = "You are a helpful assistant named Mark.
-//        When the user greets you (e.g., 'hello', 'hi'), always start your response with: 'I am Mark, how can I help you? just if the input message contain greets words.'
-//        not every response mention this message 'I am Mark, how can I help you?'.
-//        without mention this string 'PHP-style array' in response.
-//        If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
-//        Otherwise, use the business data to intelligently answer user questions.
-//        Always be friendly and identify yourself as Mark.";
-//
-//        $messages = [
-//            ['role' => 'system', 'content' => $systemMessage],
-//            ['role' => 'user', 'content' => "User input: $transcribedText\n\nBusiness Data:\n$context"],
-//        ];
-//
-//        // Send to GPT
-//        $chatResponse = Http::withHeaders([
-//            'Authorization' => 'Bearer ' . $api_key_open_ai,
-//            'Content-Type' => 'application/json',
-//        ])->post('https://api.openai.com/v1/chat/completions', [
-//            'model' => 'gpt-4o',
-//            'messages' => $messages,
-//            'temperature' => 1,
-//            'max_tokens' => 500,
-//            'top_p' => 1,
-//            'frequency_penalty' => 0,
-//            'presence_penalty' => 0,
-//        ]);
-//
-//        if (!$chatResponse->ok() || !isset($chatResponse['choices'][0]['message']['content'])) {
-//            Log::error('Chat API failed', ['response' => $chatResponse->json()]);
-//            return response()->json([
-//                'success' => false,
-//                'message' => '❌ Failed to get a response from GPT.'
-//            ], 500);
-//        }
-//
-//        $finalResponse = $chatResponse['choices'][0]['message']['content'];
-//        Log::info('GPT response success', ['response' => $finalResponse]);
-//
-//        return response()->json([
-//            'success' => true,
-//            'transcription' => $transcribedText,
-//            'response' => $finalResponse,
-//        ]);
-//    }
-
 
     public function handleVoice(Request $request)
     {
+
         $apiKey4 = config('services.openai.api_key_1');
 
         if (!$request->hasFile('audio')) {
@@ -310,21 +225,20 @@ class ChatController extends Controller
 
 
             if ($response->successful()) {
-                $transcription = $response->json()['text'];
+                $messages = $this->getMessage($response->json()['text']);
 
                 $chat = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $apiKey4,
                 ])->post('https://api.openai.com/v1/chat/completions', [
-                    'model' => 'gpt-4',
-                    'messages' => [
-                        ['role' => 'user', 'content' => $transcription],
-                    ],
+                    'model' => 'gpt-4o',
+                    'messages' => $messages,
                 ]);
 
                 if ($chat->successful()) {
+                    $reply = $chat->json()['choices'][0]['message']['content'] ?? 'No reply found';
                     return response()->json([
                         'success' => true,
-                        'reply' => $chat->json()['choices'][0]['message']['content'],
+                        'reply' => $reply,
                     ]);
                 } else {
                     return response()->json(['success' => false, 'error' => '❌ Failed to generate response from OpenAI.']);
@@ -348,6 +262,26 @@ class ChatController extends Controller
                 'error' => 'Exception occurred: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+
+
+    public function getMessage($inputMessage)
+    {
+        $context = "This is the provided business data:\n\n" . $this->longTextVar;
+
+        $systemMessage = "You are a helpful assistant named Mark.
+            When the user greets you (e.g., 'hello', 'hi'), always start your response with: 'I am Mark, how can I help you? just if the input message contain greets words.'
+            not every response mention this message 'I am Mark, how can I help you?'.
+            without mention this string 'PHP-style array' in response.
+            If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
+            Otherwise, use the business data to intelligently answer user questions.
+            Always be friendly and identify yourself as Mark.";
+
+        return [
+            ['role' => 'system', 'content' => $systemMessage],
+            ['role' => 'user', 'content' => "User input: $inputMessage\n\nBusiness Data:\n$context"],
+        ];
     }
 
 }
