@@ -279,39 +279,27 @@ const AppSidebar: React.FC = () => {
             onMouseEnter={() => !isExpanded && setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div
-                className={`flex ${
-                    !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-                }`}
-            >
-                <Link to="/">
-                    {isExpanded || isHovered || isMobileOpen ? (
-                        <>
-                            <img
-                                className="dark:hidden"
-                                src="/storage/imagesLogo/Doova Logo Profile PNG-01.PNG"
-                                alt="Logo"
-                                width={180} // Adjusted width
-                                height={50} // Adjusted height
-                            />
-                            <img
-                                className="hidden dark:block"
-                                src="/storage/imagesLogo/Doova Logo Profile PNG-02.PNG"
-                                alt="Logo"
-                                width={180} // Adjusted width
-                                height={50} // Adjusted height
-                            />
-                        </>
-                    ) : (
-                        <img
-                            src="/storage/imagesLogo/Doova Logo Profile PNG-01.PNG"
-                            alt="Logo"
-                            width={40} // Adjusted smaller width for collapsed sidebar
-                            height={40} // Adjusted smaller height for collapsed sidebar
-                        />
-                    )}
-                </Link>
+
+            <div className="flex justify-center items-center transition-all duration-300">
+                <a className="flex justify-center items-center" href="/" data-discover="true">
+                    <img
+                        className="dark:hidden h-[130px] transition-all duration-300"
+                        alt="Logo"
+                        width="180"
+                        height="130"
+                        src="/storage/imagesLogo/Doova Logo Profile PNG-01.PNG"
+                    />
+                    <img
+                        className="hidden dark:block h-[130px] transition-all duration-300"
+                        alt="Logo"
+                        width="180"
+                        height="130"
+                        src="/storage/imagesLogo/Doova Logo Profile PNG-02.PNG"
+                    />
+                </a>
             </div>
+
+
             <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
                 <nav className="mb-6">
                     <div className="flex flex-col gap-4">
@@ -326,7 +314,7 @@ const AppSidebar: React.FC = () => {
                                 {isExpanded || isHovered || isMobileOpen ? (
                                     "Menu"
                                 ) : (
-                                    <HorizontaLDots className="size-6" />
+                                    <HorizontaLDots className="size-6"/>
                                 )}
                             </h2>
                             {renderMenuItems(navItems, "main")}
@@ -342,7 +330,7 @@ const AppSidebar: React.FC = () => {
                                 {isExpanded || isHovered || isMobileOpen ? (
                                     "Others"
                                 ) : (
-                                    <HorizontaLDots />
+                                    <HorizontaLDots/>
                                 )}
                             </h2>
                             {renderMenuItems(othersItems, "others")}
