@@ -48,7 +48,7 @@ class ChatController extends Controller
             not every response mention this message 'I am Mark, how can I help you?'.
             without mention this string 'PHP-style array' in response.
             If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
-            Otherwise, use the business data to intelligently answer user questions.
+            Otherwise, use the business data to intelligently answer user questions. without appear string 'PHP-style array' in response.
             Always be friendly and identify yourself as Mark.";
 
             $messages = [
@@ -167,7 +167,6 @@ class ChatController extends Controller
     }
 
 
-
     public function handleVoice(Request $request)
     {
 
@@ -204,7 +203,6 @@ class ChatController extends Controller
             copy($audioFile->getRealPath(), $fullPath);
 
             if (!file_exists($fullPath)) {
-                Log::info('Failed to save audio file', ['response' => $fullPath]);
                 return response()->json([
                     'success' => false,
                     'error' => 'Failed to save audio file.',
@@ -235,20 +233,52 @@ class ChatController extends Controller
                 ]);
 
                 if ($chat->successful()) {
-                    $reply = $chat->json()['choices'][0]['message']['content'] ?? 'No reply found';
-                    return response()->json([
-                        'success' => true,
-                        'reply' => $reply,
-                    ]);
+                    $data = $chat->json();
+                    $content = $data['choices'][0]['message']['content'] ?? null;
+
+                    if ($content) {
+                        $textResponse = trim($content);
+                        $reportData = null;
+
+                        $pattern = '/```php(.*?)```/s';
+                        if (preg_match($pattern, $textResponse, $matches)) {
+                            $parsedData = $this->parseBotArrayString($matches[1]);
+
+                            $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
+                            $export = new ReportExport($parsedData);
+                            $filePath = storage_path('app/public/' . $path);
+                            Excel::store($export, $path, 'public');
+
+                            $reportData = [
+                                'report_path' => asset('storage/' . $path),
+                                'report_filename' => 'report.xlsx',
+                            ];
+
+                            $textResponse = preg_replace($pattern, '', $textResponse);
+                        }
+
+                        Log::info('Data', ['response' => $reportData]);
+
+                        return response()->json([
+                            'success' => true,
+                            'reply' => $textResponse,
+                            'report' => $reportData,
+                        ]);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'error' => 'Unexpected response format from API.',
+                            'raw_response' => $data,
+                        ], 500);
+                    }
                 } else {
-                    return response()->json(['success' => false, 'error' => '❌ Failed to generate response from OpenAI.']);
+                    return response()->json([
+                        'success' => false,
+                        'error' => 'Error communicating with AI service.',
+                        'status_code' => $chat->status(),
+                    ], $chat->status());
                 }
             } else {
-                Log::info('Transcription error', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-
                 return response()->json([
                     'success' => false,
                     'error' => '❌ Failed to transcribe audio.',
@@ -265,7 +295,6 @@ class ChatController extends Controller
     }
 
 
-
     public function getMessage($inputMessage)
     {
         $context = "This is the provided business data:\n\n" . $this->longTextVar;
@@ -275,7 +304,7 @@ class ChatController extends Controller
             not every response mention this message 'I am Mark, how can I help you?'.
             without mention this string 'PHP-style array' in response.
             If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
-            Otherwise, use the business data to intelligently answer user questions.
+            Otherwise, use the business data to intelligently answer user questions.  without appear string 'PHP-style array' in response.
             Always be friendly and identify yourself as Mark.";
 
         return [

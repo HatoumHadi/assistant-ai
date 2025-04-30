@@ -48,7 +48,6 @@ export default function Chat() {
             const report = data.report;
 
 
-            // Combine into one bot message
             const botMessage = {
                 sender: "bot",
                 text: replyText,
@@ -127,10 +126,24 @@ export default function Chat() {
                         throw new Error(`Expected JSON, got: ${text.slice(0, 100)}...`);
                     }
 
+
                     const data = await response.json();
+                    const replyText = data.reply;
+                    const report = data.report;
+
+
+                    const botMessage = {
+                        sender: "bot",
+                        text: replyText,
+                        ...(report && {
+                            fileUrl: report.report_path,
+                            fileName: report.report_filename
+                        }),
+                    };
+
 
                     if (data.success) {
-                        setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+                        setMessages((prev) => [...prev, botMessage]);
                     } else {
                         setMessages((prev) => [...prev, { sender: "bot", text: data.error || "❌ Something went wrong with voice processing." }]);
                     }

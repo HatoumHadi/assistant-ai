@@ -47,19 +47,18 @@ export default function Chat() {
             const replyText = data.reply;
             const report = data.report;
 
-            setMessages((prev) => [...prev, { sender: "bot", text: replyText }]);
 
-            if (report) {
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        sender: "bot",
-                        text: replyText,
-                        fileUrl: report?.report_path ?? null,
-                        fileName: report?.report_filename ?? null,
-                    },
-                ]);
-            }
+            const botMessage = {
+                sender: "bot",
+                text: replyText,
+                ...(report && {
+                    fileUrl: report.report_path,
+                    fileName: report.report_filename
+                }),
+            };
+
+            setMessages((prev) => [...prev, botMessage]);
+
         } catch {
             setMessages((prev) => [...prev, { sender: "bot", text: "❌ Something went wrong. Try again." }]);
         } finally {
