@@ -9,31 +9,30 @@ type RangeKey = "Monthly" | "Quarterly" | "Annually";
 
 const chartData: Record<RangeKey, { x: string; y: number }[]> = {
     Monthly: [
-        { x: "Jul '25", y: 34 },
-        { x: "15 Jul", y: 35 },
-        { x: "Aug '25", y: 33 },
-        { x: "15 Aug", y: 32 },
-        { x: "Sep '25", y: 31 },
-        { x: "15 Sep", y: 30 },
-        { x: "Oct '25", y: 32 },
-        { x: "15 Oct", y: 30 },
-        { x: "Nov '25", y: 31 },
+        { x: "Jan '25", y: 1200 },
+        { x: "Feb '25", y: 1120 },
+        { x: "Mar '25", y: 980 },
+        { x: "Apr '25", y: 890 },
+        { x: "May '25", y: 1020 },
+        { x: "Jun '25", y: 970 },
+        { x: "Jul '25", y: 930 },
+        { x: "Aug '25", y: 880 },
+        { x: "Sep '25", y: 950 },
     ],
     Quarterly: [
-        { x: "Q1 '25", y: 38 },
-        { x: "Q2 '25", y: 35 },
-        { x: "Q3 '25", y: 32 },
-        { x: "Q4 '25", y: 30 },
+        { x: "Q1 '25", y: 3300 }, // Jan+Feb+Mar
+        { x: "Q2 '25", y: 2880 }, // Apr+May+Jun
+        { x: "Q3 '25", y: 2760 }, // Jul+Aug+Sep
     ],
     Annually: [
-        { x: "2022", y: 40 },
-        { x: "2023", y: 36 },
-        { x: "2024", y: 34 },
-        { x: "2025", y: 31 },
+        { x: "2022", y: 10400 },
+        { x: "2023", y: 10950 },
+        { x: "2024", y: 10120 },
+        { x: "2025", y: 8940 }, // Projection
     ],
 };
 
-export const PortfolioPerformance = () => {
+export const StockPerformance = () => {
     const [selectedRange, setSelectedRange] = useState<RangeKey>("Monthly");
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -54,7 +53,7 @@ export const PortfolioPerformance = () => {
         },
         markers: {
             size: 5,
-            colors: ["#12baab"],        // Point color
+            colors: ["#12baab"],
             strokeColors: "#fff",
             strokeWidth: 2,
             hover: {
@@ -75,26 +74,26 @@ export const PortfolioPerformance = () => {
             labels: { style: { fontSize: "12px" } },
         },
         yaxis: {
-            min: 28,
-            max: 40,
+            min: 800,
+            max: 12000,
             tickAmount: 6,
             labels: {
-                formatter: (val) => `${val.toFixed(2)}`,
+                formatter: (val) => `${val.toFixed(0)} units`,
             },
         },
         tooltip: {
             marker: {
-                fillColors: ["#12baab"], // Tooltip point color
+                fillColors: ["#12baab"],
             },
             y: {
-                formatter: (val) => `${val.toFixed(2)}`,
+                formatter: (val) => `${val.toFixed(0)} units`,
             },
         },
     };
 
     const series = [
         {
-            name: "Performance",
+            name: "Stock Units",
             data: chartData[selectedRange],
         },
     ];
@@ -103,9 +102,9 @@ export const PortfolioPerformance = () => {
         <div className="bg-white rounded-2xl shadow p-6 dark:border-gray-800 dark:bg-white/[0.03] w-full max-w-full overflow-hidden">
             <div className="flex flex-wrap justify-between items-start mb-4 gap-4">
                 <div>
-                    <h2 className="text-xl font-semibold dark:text-white">Portfolio Performance</h2>
+                    <h2 className="text-xl font-semibold dark:text-white">Stock Performance</h2>
                     <p className="text-sm text-gray-500 dark:text-white">
-                        Here is your performance stats of each month
+                        Track inventory units across your furniture business
                     </p>
                 </div>
 

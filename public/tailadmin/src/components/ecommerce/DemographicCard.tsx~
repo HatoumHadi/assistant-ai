@@ -18,31 +18,31 @@ export default function DemographicCard() {
     const countries = [
         {
             name: "USA",
-            flag: "/storage/images/country/country-02.svg",
+            flag: "/tailadmin/build/images/country/country-01.svg",
             customers: 3200,
             percentage: 42,
         },
         {
             name: "France",
-            flag: "/storage/images/country/country-02.svg",
+            flag: "/tailadmin/build/images/country/country-02.svg",
             customers: 1800,
             percentage: 24,
         },
         {
             name: "UK",
-            flag: "/storage/images/country/country-04.svg",
+            flag: "/tailadmin/build/images/country/country-04.svg",
             customers: 1300,
             percentage: 17,
         },
         {
             name: "Finland",
-            flag: "/storage/images/country/country-06.svg",
+            flag: "/tailadmin/build/images/country/country-06.svg",
             customers: 700,
             percentage: 9,
         },
         {
             name: "Belgium",
-            flag: "/storage/images/country/country-07.svg",
+            flag: "/tailadmin/build/images/country/country-07.svg",
             customers: 550,
             percentage: 8,
         },

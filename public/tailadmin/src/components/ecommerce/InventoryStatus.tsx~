@@ -1,12 +1,12 @@
 import ChartTab from "../common/ChartTab";
 
 export default function StatisticsChart() {
-    // Dummy furniture inventory data
+    // Dummy inventory data
     const inventoryData = [
-        { id: 1, product: "Sofa Set", quantity: 25, status: "In Stock" },
-        { id: 2, product: "Dining Table", quantity: 0, status: "Out of Stock" },
-        { id: 3, product: "Office Chair", quantity: 7, status: "Low Stock" },
-        { id: 4, product: "Bookshelf", quantity: 12, status: "In Stock" },
+        { id: 1, product: "Printer A1", quantity: 25, status: "In Stock" },
+        { id: 2, product: "Scanner B2", quantity: 0, status: "Out of Stock" },
+        { id: 3, product: "Copier C3", quantity: 7, status: "Low Stock" },
+        { id: 4, product: "Label Printer D4", quantity: 12, status: "In Stock" },
     ];
 
     return (
@@ -14,10 +14,10 @@ export default function StatisticsChart() {
             <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
                 <div className="w-full">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        Furniture Inventory Status
+                        Inventory status
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Overview of current furniture availability
+                        Overview of current product availability
                     </p>
                 </div>
                 <div className="flex items-start w-full gap-3 sm:justify-end">

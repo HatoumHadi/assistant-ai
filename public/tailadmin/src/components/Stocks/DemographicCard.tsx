@@ -20,10 +20,10 @@ export default function DemographicCard() {
             <div className="flex justify-between">
                 <div>
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        Customers Demographic
+                        Furniture Market Demographic
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Number of customer based on country
+                        Customers distribution based on country
                     </p>
                 </div>
                 <div className="relative inline-block">
@@ -63,23 +63,23 @@ export default function DemographicCard() {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="items-center w-full rounded-full max-w-8">
-                            <img src="/tailadmin/build/images/country/country-01.svg" alt="usa" />
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg" alt="usa" />
                         </div>
                         <div>
                             <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
                                 USA
                             </p>
                             <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                2,379 Customers
-              </span>
+                                3,200 Customers
+                            </span>
                         </div>
                     </div>
                     <div className="flex w-full max-w-[140px] items-center gap-3">
                         <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
-                            <div className="absolute left-0 top-0 h-full w-[79%] rounded-sm bg-brand-500"></div>
+                            <div className="absolute left-0 top-0 h-full w-[64%] rounded-sm bg-brand-500"></div>
                         </div>
                         <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                            79%
+                            64%
                         </p>
                     </div>
                 </div>
@@ -87,23 +87,71 @@ export default function DemographicCard() {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="items-center w-full rounded-full max-w-8">
-                            <img src="/tailadmin/build/images/country/country-02.svg" alt="france" />
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="france" />
                         </div>
                         <div>
                             <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
                                 France
                             </p>
                             <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                589 Customers
-              </span>
+                                950 Customers
+                            </span>
                         </div>
                     </div>
                     <div className="flex w-full max-w-[140px] items-center gap-3">
                         <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
-                            <div className="absolute left-0 top-0 h-full w-[23%] rounded-sm bg-brand-500"></div>
+                            <div className="absolute left-0 top-0 h-full w-[19%] rounded-sm bg-brand-500"></div>
                         </div>
                         <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                            23%
+                            19%
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="items-center w-full rounded-full max-w-8">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="germany" />
+                        </div>
+                        <div>
+                            <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
+                                Germany
+                            </p>
+                            <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                                650 Customers
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex w-full max-w-[140px] items-center gap-3">
+                        <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
+                            <div className="absolute left-0 top-0 h-full w-[13%] rounded-sm bg-brand-500"></div>
+                        </div>
+                        <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                            13%
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="items-center w-full rounded-full max-w-8">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg" alt="canada" />
+                        </div>
+                        <div>
+                            <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
+                                Canada
+                            </p>
+                            <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                                200 Customers
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex w-full max-w-[140px] items-center gap-3">
+                        <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
+                            <div className="absolute left-0 top-0 h-full w-[4%] rounded-sm bg-brand-500"></div>
+                        </div>
+                        <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                            4%
                         </p>
                     </div>
                 </div>

@@ -28,8 +28,8 @@ const navItems: NavItem[] = [
         icon: <GridIcon />,
         name: "Dashboard",
         subItems: [
-            { name: "Ecommerce", path: "/", pro: false },
-            { name: "Stocks", path: "/stocks", pro: false },
+            { name: "Business Overview", path: "/", pro: false },
+            { name: "Stock Performance", path: "/stocks", pro: false },
             { name: "Chatbot", path: "/chat", pro: false }
         ],
     },
@@ -283,7 +283,7 @@ const AppSidebar: React.FC = () => {
             <div className="flex justify-center items-center transition-all duration-300">
                 <a className="flex justify-center items-center" href="/" data-discover="true">
                     <img
-                        className="dark:hidden h-[130px] transition-all duration-300"
+                        className="dark:hidden transition-all duration-300"
                         alt="Logo"
                         width="180"
                         height="130"
@@ -312,7 +312,7 @@ const AppSidebar: React.FC = () => {
                                 }`}
                             >
                                 {isExpanded || isHovered || isMobileOpen ? (
-                                    "Menu"
+                                    ""
                                 ) : (
                                     <HorizontaLDots className="size-6"/>
                                 )}

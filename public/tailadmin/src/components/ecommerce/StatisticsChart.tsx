@@ -3,13 +3,14 @@ import { ApexOptions } from "apexcharts";
 import ChartTab from "../common/ChartTab";
 
 export default function StatisticsChart() {
+    // Define sales data for different furniture items over the months
     const options: ApexOptions = {
         legend: {
-            show: false,
+            show: true,
             position: "top",
             horizontalAlign: "left",
         },
-        colors: ["#12baab"],
+        colors: ["#12baab", "#ff7b7b", "#7b61ff"], // Different colors for each product
         chart: {
             fontFamily: "Outfit, sans-serif",
             height: 310,
@@ -19,11 +20,11 @@ export default function StatisticsChart() {
             },
         },
         stroke: {
-            curve: "straight",
+            curve: "smooth", // Smooth curve for better visualization
             width: [2],
         },
         fill: {
-            type: "solid", // changed from gradient to solid for a cleaner line chart
+            type: "solid", // Solid fill for a cleaner line chart
         },
         markers: {
             size: 0,
@@ -78,18 +79,27 @@ export default function StatisticsChart() {
                 },
             },
             title: {
-                text: "",
+                text: "Sales (Units)",
                 style: {
-                    fontSize: "0px",
+                    fontSize: "14px",
                 },
             },
         },
     };
 
+    // Sales data for 3 furniture items over 12 months
     const series = [
         {
-            name: "Sales",
-            data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235],
+            name: "Sofa Sets",
+            data: [120, 140, 130, 150, 160, 180, 210, 220, 240, 250, 260, 270], // Sofa sales over the months
+        },
+        {
+            name: "Dining Tables",
+            data: [80, 75, 90, 85, 100, 110, 130, 150, 160, 170, 180, 190], // Dining table sales
+        },
+        {
+            name: "Office Chairs",
+            data: [150, 160, 170, 180, 190, 200, 210, 230, 250, 270, 290, 310], // Office chairs sales
         },
     ];
 
@@ -98,10 +108,10 @@ export default function StatisticsChart() {
             <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
                 <div className="w-full">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        Sales trends
+                        Furniture Sales Trends
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Target you’ve set for each month
+                        Monthly sales performance for different furniture products
                     </p>
                 </div>
                 <div className="flex items-start w-full gap-3 sm:justify-end">

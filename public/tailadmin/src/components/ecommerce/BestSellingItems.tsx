@@ -12,7 +12,7 @@ export default function StatisticsChart() {
             },
             fontFamily: "Outfit, sans-serif",
         },
-        colors: ["#12baab"], // blue for best-selling items
+        colors: ["#12baab"], // teal for best-selling furniture
         plotOptions: {
             bar: {
                 borderRadius: 6,
@@ -25,7 +25,11 @@ export default function StatisticsChart() {
         },
         xaxis: {
             categories: [
-                "Printer A1", "Scanner B2", "Copier C3", "Label Printer D4", "Fax E5"
+                "Sofa Set",
+                "Dining Table",
+                "Office Chair",
+                "Bookshelf",
+                "TV Stand",
             ],
             labels: {
                 style: {
@@ -69,7 +73,7 @@ export default function StatisticsChart() {
     const series = [
         {
             name: "Units Sold",
-            data: [240, 180, 150, 100, 70],
+            data: [320, 250, 180, 120, 90], // Coordinated with furniture products
         },
     ];
 
@@ -78,10 +82,10 @@ export default function StatisticsChart() {
             <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
                 <div className="w-full">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        Best-selling items
+                        Best-Selling Furniture
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Products ranked by total sales volume
+                        Furniture items ranked by total units sold
                     </p>
                 </div>
                 <div className="flex items-start w-full gap-3 sm:justify-end">

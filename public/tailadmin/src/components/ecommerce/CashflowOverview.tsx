@@ -2,7 +2,7 @@ import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import ChartTab from "../common/ChartTab";
 
-export default function StatisticsChart() {
+export default function SalesChart() {
     const options: ApexOptions = {
         chart: {
             type: "area",
@@ -12,7 +12,7 @@ export default function StatisticsChart() {
             },
             fontFamily: "Outfit, sans-serif",
         },
-        colors: ["#10B981"], // a greenish color for cashflow
+        colors: ["#FF5733"], // Warm tone for furniture sales trend
         dataLabels: {
             enabled: false,
         },
@@ -35,12 +35,8 @@ export default function StatisticsChart() {
                 "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
             ],
-            axisBorder: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
+            axisBorder: { show: false },
+            axisTicks: { show: false },
         },
         yaxis: {
             labels: {
@@ -48,24 +44,18 @@ export default function StatisticsChart() {
                     fontSize: "12px",
                     colors: ["#6B7280"],
                 },
+                formatter: (val: number) => `$${(val / 1000).toFixed(0)}k`,
             },
         },
         tooltip: {
-            x: {
-                format: "MMM",
+            x: { format: "MMM" },
+            y: {
+                formatter: (val: number) => `$${val.toLocaleString()} USD`,
             },
         },
         grid: {
-            xaxis: {
-                lines: {
-                    show: false,
-                },
-            },
-            yaxis: {
-                lines: {
-                    show: true,
-                },
-            },
+            xaxis: { lines: { show: false } },
+            yaxis: { lines: { show: true } },
         },
         legend: {
             show: false,
@@ -74,8 +64,21 @@ export default function StatisticsChart() {
 
     const series = [
         {
-            name: "Cashflow",
-            data: [12000, 15000, 13000, 14000, 18000, 20000, 17000, 16000, 19000, 21000, 22000, 25000],
+            name: "Total Revenue",
+            data: [
+                95000,   // Jan
+                112000,  // Feb
+                121000,  // Mar
+                135000,  // Apr
+                149000,  // May
+                160000,  // Jun
+                142000,  // Jul
+                138000,  // Aug
+                151000,  // Sep
+                172000,  // Oct
+                183000,  // Nov
+                195000   // Dec
+            ],
         },
     ];
 
@@ -84,10 +87,10 @@ export default function StatisticsChart() {
             <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
                 <div className="w-full">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        Cashflow overview
+                        Furniture Sales Overview
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Monthly cash inflow and outflow trends
+                        Monthly revenue trends from furniture sales in 2024
                     </p>
                 </div>
                 <div className="flex items-start w-full gap-3 sm:justify-end">

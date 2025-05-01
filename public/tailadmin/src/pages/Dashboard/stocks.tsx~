@@ -1,5 +1,6 @@
 import EcommerceMetrics from "../../components/Stocks/EcommerceMetrics";
 import DemographicCard from "../../components/Stocks/DemographicCard";
+import TrendingStocks from "../../components/Stocks/MonthlySalesChart";
 import PageMeta from "../../components/common/PageMeta";
 import { StockPerformance } from "../../components/Stocks/StatisticsChart";
 
@@ -20,6 +21,10 @@ export default function Stocks() {
                 </div>
                 <div className="col-span-12">
                     <StockPerformance />
+                </div>
+
+                <div className="col-span-12">
+                    <TrendingStocks />
                 </div>
             </div>
         </>
