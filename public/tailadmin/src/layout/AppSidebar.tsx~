@@ -280,10 +280,10 @@ const AppSidebar: React.FC = () => {
             onMouseLeave={() => setIsHovered(false)}
         >
 
-            <div className="flex justify-center items-center transition-all duration-300">
+            <div className="flex justify-center items-center transition-all duration-300 h-24">
                 <a className="flex justify-center items-center" href="/" data-discover="true">
                     <img
-                        className="dark:hidden h-[130px] transition-all duration-300"
+                        className="dark:hidden transition-all duration-300"
                         alt="Logo"
                         width="180"
                         height="130"
