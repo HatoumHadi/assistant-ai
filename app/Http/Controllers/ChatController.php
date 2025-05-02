@@ -70,7 +70,9 @@ class ChatController extends Controller
                     $reportData = null;
 
                     $pattern = '/```php(.*?)```/s';
-                    if (preg_match($pattern, $textResponse, $matches)) {
+                    $patternArray = '/```\s*(\[.*?\])\s*```/s';
+
+                    if (preg_match($pattern, $textResponse, $matches) || preg_match($patternArray, $textResponse, $matches)) {
                         $parsedData = $this->parseBotArrayString($matches[1]);
 
                         $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
@@ -222,7 +224,9 @@ class ChatController extends Controller
                         $reportData = null;
 
                         $pattern = '/```php(.*?)```/s';
-                        if (preg_match($pattern, $textResponse, $matches)) {
+                        $patternArray = '/```\s*(\[.*?\])\s*```/s';
+
+                        if (preg_match($pattern, $textResponse, $matches) || preg_match($patternArray, $textResponse, $matches)) {
                             $parsedData = $this->parseBotArrayString($matches[1]);
 
                             $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
@@ -237,8 +241,6 @@ class ChatController extends Controller
 
                             $textResponse = preg_replace($pattern, '', $textResponse);
                         }
-
-                        Log::info('Data', ['response' => $reportData]);
 
                         return response()->json([
                             'success' => true,
