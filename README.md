@@ -4,19 +4,9 @@
 
 ## Installation
 
-1. Create the database (ex: `tailadmin_template`)
+1. Create the database (ex: `template`)
 
-2. Terminal (Powershell, etc)
-
-    ```shell
-    git clone https://github.com/raflizocky/laravel11-tailadmin.git
-    ```
-
-    ```shell
-    code laravel11-tailadmin
-    ```
-
-3. `.env`
+2. `.env`
 
     - Terminal:
         ```shell
@@ -37,14 +27,4 @@
    composer i ; php artisan key:generate ; php artisan mi ; php artisan serve
    ```
       
-## Contributing
 
-If you encounter any issues or would like to contribute to the project, feel free to:
-
--   Report any [issues](https://github.com/raflizocky/laravel11-tailadmin/issues)
--   Submit a [pull request](https://github.com/raflizocky/laravel11-tailadmin/pulls)
--   Participate in [discussions](https://github.com/raflizocky/laravel11-tailadmin/discussions) for any questions, feedback, or suggestions
-
-## License
-
-Code released under the [MIT License](https://github.com/raflizocky/laravel11-tailadmin/blob/main/LICENSE).

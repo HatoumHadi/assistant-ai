@@ -190,7 +190,7 @@ export default function Chat() {
 
     return (
         <>
-            <PageMeta title="AI Chat | TailAdmin" description="Ask questions and get AI responses on this page." />
+            <PageMeta title="AI Chat" description="Ask questions and get AI responses on this page." />
             <div className="grid grid-cols-12 gap-4 md:gap-6">
                 <div className="col-span-12 md:col-span-8 md:col-start-3 bg-white dark:bg-gray-900 shadow-md rounded-xl h-[80vh] flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800">
                     {/* Header */}
