@@ -77,7 +77,7 @@ export const StockPerformance = () => {
             max: 12000,
             tickAmount: 6,
             labels: {
-                formatter: (val) => `${Math.round(val).toLocaleString()} units`,
+                formatter: (val) => `${val.toLocaleString()} units`,
             },
         },
         tooltip: {
@@ -85,7 +85,7 @@ export const StockPerformance = () => {
                 fillColors: ["#12baab"],
             },
             y: {
-                formatter: (val) => `${Math.round(val).toLocaleString()} units`,
+                formatter: (val) => `${val.toLocaleString()} units`,
             },
         },
     };
@@ -134,6 +134,7 @@ export const StockPerformance = () => {
                             </div>
                         )}
                     </div>
+
 
                     <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                         <MoreDotIcon />
