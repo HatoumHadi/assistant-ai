@@ -280,7 +280,7 @@ const AppSidebar: React.FC = () => {
             onMouseLeave={() => setIsHovered(false)}
         >
 
-            <div className="flex justify-center items-center transition-all duration-300 h-24">
+            <div className="hidden md:flex justify-center items-center transition-all duration-300 h-24">
                 <a className="flex justify-center items-center" href="/" data-discover="true">
                     <img
                         className="dark:hidden transition-all duration-300"
@@ -300,7 +300,8 @@ const AppSidebar: React.FC = () => {
             </div>
 
 
-            <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+
+            <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar mt-6 sm:mt-0">
                 <nav className="mb-6">
                     <div className="flex flex-col gap-4">
                         <div>

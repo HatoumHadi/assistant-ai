@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import PageMeta from "../../components/common/PageMeta";
-import { FiMic, FiStopCircle } from "react-icons/fi";
+import { FiMic, FiStop } from "react-icons/fi";
 
 export default function Chat() {
     const [input, setInput] = useState("");
@@ -244,7 +244,7 @@ export default function Chat() {
                             disabled={loading}
                             title={isRecording ? "Stop Recording" : "Start Recording"}
                         >
-                            {isRecording ? <FiStopCircle size={18} /> : <FiMic size={18} />}
+                            {isRecording ? <FiStop size={18} /> : <FiMic size={18} />}
                         </button>
 
                         <button

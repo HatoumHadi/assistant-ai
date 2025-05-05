@@ -108,7 +108,7 @@ export const StockPerformance = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <div className="relative w-[120px] z-50">
+                    <div className="relative w-[120px] z-40">
                         <button
                             onClick={toggleDropdown}
                             className="px-3 py-1 rounded-md text-sm text-white w-full"

@@ -280,7 +280,7 @@ const AppSidebar: React.FC = () => {
             onMouseLeave={() => setIsHovered(false)}
         >
 
-            <div className="flex justify-center items-center transition-all duration-300 h-24">
+            <div className="hidden md:flex justify-center items-center transition-all duration-300 h-24">
                 <a className="flex justify-center items-center" href="/" data-discover="true">
                     <img
                         className="dark:hidden transition-all duration-300"
@@ -290,7 +290,7 @@ const AppSidebar: React.FC = () => {
                         src="/storage/imagesLogo/Doova Logo Profile PNG-01.PNG"
                     />
                     <img
-                        className="hidden dark:block h-[130px] transition-all duration-300"
+                        className="hidden dark:block transition-all duration-300"
                         alt="Logo"
                         width="180"
                         height="130"
@@ -298,6 +298,7 @@ const AppSidebar: React.FC = () => {
                     />
                 </a>
             </div>
+
 
 
             <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
