@@ -78,20 +78,21 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
             </svg>
           </button>
 
-          <Link to="/" className="lg:hidden">
-            <img
-              className="dark:hidden"
-              src="/storage/imagesLogo/Doova Logo Profile PNG-01.PNG"
-              alt="Logo"
-            />
-            <img
-              className="hidden dark:block"
-              src="/storage/imagesLogo/Doova Logo Profile PNG-02.PNG"
-              alt="Logo"
-            />
-          </Link>
+            <Link to="/" className="lg:hidden">
+                <img
+                    className="dark:hidden w-24 h-auto" // adjust w-24 to your desired width
+                    src="/storage/imagesLogo/Doova Logo Profile PNG-01.png"
+                    alt="Logo"
+                />
+                <img
+                    className="hidden dark:block w-24 h-auto"
+                    src="/storage/imagesLogo/Doova Logo Profile PNG-02.png"
+                    alt="Logo"
+                />
+            </Link>
 
-          <button
+
+            <button
             onClick={toggleApplicationMenu}
             className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
           >
