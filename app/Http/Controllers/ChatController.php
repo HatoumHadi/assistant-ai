@@ -292,7 +292,7 @@ class ChatController extends Controller
             If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
             Otherwise, use the business data to intelligently answer user questions.  without appear string 'PHP-style array' in response.
             Always be friendly and identify yourself as Mark.
-            -If say give me a report without mention report for what, not generate report and get the correct response.";
+            - Do not generate a report if the user's input is not clearly related to the business context.";
     }
 
 }
