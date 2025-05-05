@@ -104,11 +104,11 @@ export default function Chat() {
 
             recorder.onstop = async () => {
                 // Here we are using 'chunks' to create the audio Blob
-                const blob = new Blob(chunks, { type: "audio/webm" });
+                const blob = new Blob(chunks, { type: "audio/mp3" });
 
                 // Now using the 'blob' instead of 'recordedBlob'
                 const formData = new FormData();
-                formData.append("audio", blob, "voice-message.webm");
+                formData.append("audio", blob, "voice-message.mp3");
 
                 setMessages((prev) => [...prev, { sender: "user", text: "[Voice Message]" }]);
                 setLoading(true);

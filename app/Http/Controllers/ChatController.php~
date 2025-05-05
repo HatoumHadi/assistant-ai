@@ -111,7 +111,7 @@ class ChatController extends Controller
     {
         $arrayString = trim($this->extractArrayContent($arrayString));
 
-        \Log::info('Parsing array string:', ['arrayString' => $arrayString]);
+//        \Log::info('Parsing array string:', ['arrayString' => $arrayString]);
 
         try {
             $evaluated = eval("return $arrayString;");
@@ -163,17 +163,9 @@ class ChatController extends Controller
             }
 
 
-            Log::info('Audio file info', [
-                'valid' => $audioFile->isValid(),
-                'originalName' => $audioFile->getClientOriginalName(),
-                'mime' => $audioFile->getMimeType(),
-                'size' => $audioFile->getSize(),
-                'realPath' => $audioFile->getRealPath()
-            ]);
+            Storage::makeDirectory('voice');
 
-            Storage::makeDirectory('temp');
-
-            $fileName = uniqid() . '.webm';
+            $fileName = uniqid() . '.mp3';
             $fullPath = storage_path('app/temp/' . $fileName);
             copy($audioFile->getRealPath(), $fullPath);
 
@@ -190,12 +182,13 @@ class ChatController extends Controller
             ])->attach(
                 'file',
                 file_get_contents($fullPath),
-                'voice-message.webm', // filename
-                ['Content-Type' => 'audio/webm'] // specify MIME type manually
+                'voice-message.mp3', // filename
+                ['Content-Type' => 'audio/mp3'] // specify MIME type manually
             )->post('https://api.openai.com/v1/audio/transcriptions', [
                 'model' => 'whisper-1',
             ]);
 
+//            Log::info('response: ',['response' => $response->json()]);
 
             if ($response->successful()) {
                 $messages = $this->getMessage($response->json()['text']);
@@ -217,8 +210,9 @@ class ChatController extends Controller
 
                         $pattern = '/```php(.*?)```/s';
                         $patternArray = '/```\s*(\[.*?\])\s*```/s';
+                        $patternPlainArray = "/\[\s*'header'\s*=>\s*\[.*?\],\s*'data'\s*=>\s*\[.*?\]\s*\]/s";
 
-                        if (preg_match($pattern, $textResponse, $matches) || preg_match($patternArray, $textResponse, $matches)) {
+                        if (preg_match($pattern, $textResponse, $matches) || preg_match($patternArray, $textResponse, $matches) || preg_match($patternPlainArray, $textResponse, $matches)) {
                             $parsedData = $this->parseBotArrayString($matches[1]);
 
                             $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
@@ -272,6 +266,8 @@ class ChatController extends Controller
 
     public function getMessage($inputMessage)
     {
+        Log::info('Input voice message:', ['input message:' => $inputMessage]);
+
         $context = "This is the provided business data:\n\n" . $this->longTextVar;
 
         $systemMessage = $this->getDescriptionDetails();
@@ -292,7 +288,8 @@ class ChatController extends Controller
             If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
             Otherwise, use the business data to intelligently answer user questions.  without appear string 'PHP-style array' in response.
             Always be friendly and identify yourself as Mark.
-            -If say give me a report without mention report for what like 'orders, business, .....', not generate report and get the correct response.";
+            - Do not generate a report if the user's input is not clearly related to the business context. Do not generate an empty report.
+            - The response should return in arabic or english only";
     }
 
 }
