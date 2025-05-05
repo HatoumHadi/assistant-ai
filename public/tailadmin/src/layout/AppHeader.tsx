@@ -86,12 +86,12 @@ const AppHeader: React.FC = () => {
           <Link to="/" className="lg:hidden">
             <img
               className="dark:hidden  w-24 h-auto"
-              src="/storage/imagesLogo/Doova Logo Profile PNG-01.PNG"
+              src="/storage/imagesLogo/Doova Logo Profile PNG-01.png"
               alt="Logo"
             />
             <img
               className="hidden dark:block  w-24 h-auto"
-              src="/storage/imagesLogo/Doova Logo Profile PNG-02.PNG"
+              src="/storage/imagesLogo/Doova Logo Profile PNG-02.png"
               alt="Logo"
             />
           </Link>

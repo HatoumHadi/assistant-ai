@@ -21,7 +21,7 @@ export default function AuthLayout({
                 <img
                   width={231}
                   height={48}
-                  src="/storage/imagesLogo/Doova Logo Profile PNG-02.PNG"
+                  src="/storage/imagesLogo/Doova Logo Profile PNG-02.png"
                   alt="Logo"
                 />
               </Link>
