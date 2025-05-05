@@ -13,8 +13,6 @@ use Illuminate\Support\Str;
 
 class ChatController extends Controller
 {
-
-
     public $longTextVar = null;
 
 
@@ -35,13 +33,7 @@ class ChatController extends Controller
 
             $context = "This is the provided business data:\n\n" . $this->longTextVar;
 
-            $systemMessage = "You are a helpful assistant named Mark.
-            When the user greets you (e.g., 'hello', 'hi'), always start your response with: 'I am Mark, how can I help you? just if the input message contain greets words.'
-            not every response mention this message 'I am Mark, how can I help you?'.
-            without mention this string 'PHP-style array' in response.
-            If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
-            Otherwise, use the business data to intelligently answer user questions. without appear string 'PHP-style array' in response.
-            Always be friendly and identify yourself as Mark.";
+            $systemMessage = $this->getDescriptionDetails();
 
             $messages = [
                 ['role' => 'system', 'content' => $systemMessage],
@@ -282,18 +274,25 @@ class ChatController extends Controller
     {
         $context = "This is the provided business data:\n\n" . $this->longTextVar;
 
-        $systemMessage = "You are a helpful assistant named Mark.
-            When the user greets you (e.g., 'hello', 'hi'), always start your response with: 'I am Mark, how can I help you? just if the input message contain greets words.'
-            not every response mention this message 'I am Mark, how can I help you?'.
-            without mention this string 'PHP-style array' in response.
-            If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
-            Otherwise, use the business data to intelligently answer user questions.  without appear string 'PHP-style array' in response.
-            Always be friendly and identify yourself as Mark.";
+        $systemMessage = $this->getDescriptionDetails();
 
         return [
             ['role' => 'system', 'content' => $systemMessage],
             ['role' => 'user', 'content' => "User input: $inputMessage\n\nBusiness Data:\n$context"],
         ];
+    }
+
+
+    public function getDescriptionDetails(): string
+    {
+        return "You are a helpful assistant named Mark.
+            When the user greets you (e.g., 'hello', 'hi'), always start your response with: 'I am Mark, how can I help you? just if the input message contain greets words.'
+            not every response mention this message 'I am Mark, how can I help you?'.
+            without mention this string 'PHP-style array' in response.
+            If the user requests a report, reply with a PHP-style array: ['header' => [...], 'data' => [[...], [...]]]
+            Otherwise, use the business data to intelligently answer user questions.  without appear string 'PHP-style array' in response.
+            Always be friendly and identify yourself as Mark.
+            -If say give me a report without mention report for what, not generate report and get the correct response.";
     }
 
 }
