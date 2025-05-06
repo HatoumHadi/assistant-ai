@@ -3,6 +3,8 @@
 !/public/build
 /public/hot
 /public/storage
+!/public/storage/fileContent/
+!/public/storage/fileContent/DashbaordContent.txt
 !/public/tailadmin/
 !/public/tailadmin/src/
 !/public/tailadmin/src/**
