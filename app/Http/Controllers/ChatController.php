@@ -290,7 +290,7 @@ class ChatController extends Controller
             Otherwise, use the business data to intelligently answer user questions.  without appear string 'PHP-style array' in response.
             Always be friendly and identify yourself as Mark.
             - Do not generate a report if the user's input is not clearly related to the business context. Do not generate an empty report.
-            - The response should return in arabic or english only";
+            - The response should return in arabic or english only, and Based on the language input, if it is Arabic, the response must be in Arabic, otherwise if it is English, the response must be in English.";
     }
 
 }
