@@ -5,6 +5,6 @@
     <title>
         Admin Dashboard Template
     </title>
-    <link rel="icon" href="{{ asset('storage/favicon.ico') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('storage/favicon.png') }}" />
     <link href="{{ asset('tailadmin/build/style.css') }}" rel="stylesheet">
 </head>

@@ -22,9 +22,12 @@ export default function SignInForm() {
         setError(null);
 
         try {
-            await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie', { withCredentials: true });
 
-            const response = await axios.post("http://127.0.0.1:8000/api/login", {
+            const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
+            await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
+
+            const response = await axios.post(`${API_BASE_URL}/api/login`, {
                 email,
                 password,
             }, {

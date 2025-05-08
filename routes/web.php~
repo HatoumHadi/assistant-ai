@@ -5,8 +5,11 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('/{any}', function () {
+    return File::get(public_path('index.html'));
+})->where('any', '.*');
 
-Route::fallback(function () {
-    return redirect('/siginin');
-});
+
+Route::get('/signin', function () {
+    return File::get(public_path('index.html'));
+})->name('login');

@@ -14,7 +14,10 @@ export default function UserDropdown() {
     const logout = async () => {
         try {
             const token = localStorage.getItem('auth_token');
-            axios.post('http://127.0.0.1:8000/api/logout', {}, {
+
+            const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
+            axios.post(`${API_BASE_URL}/api/logout`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

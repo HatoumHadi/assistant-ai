@@ -14,7 +14,6 @@ export default function UserDropdown() {
     const logout = async () => {
         try {
             const token = localStorage.getItem('auth_token');
-            console.log('token:', token);
             axios.post('http://127.0.0.1:8000/api/logout', {}, {
                 headers: {
                     Authorization: `Bearer ${token}`

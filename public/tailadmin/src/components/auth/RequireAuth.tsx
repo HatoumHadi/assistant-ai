@@ -13,7 +13,9 @@ export default function RequireAuth({ children }: { children: JSX.Element }) {
             return;
         }
 
-        axios.get("http://127.0.0.1:8000/api/check", {
+        const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
+        axios.get(`${API_BASE_URL}/api/check`, {
             headers: {
                 Accept: "application/json",
                 Authorization: `Bearer ${token}`,
