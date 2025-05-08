@@ -5,6 +5,7 @@
 /public/storage
 !/public/storage/fileContent/
 !/public/storage/fileContent/DashbaordContent.txt
+!/public/storage/favicon.ico
 !/public/tailadmin/
 !/public/tailadmin/src/
 !/public/tailadmin/src/**
