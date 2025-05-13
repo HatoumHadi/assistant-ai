@@ -70,12 +70,11 @@ class ChatController extends Controller
 
                         $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
                         $export = new ReportExport($parsedData);
-                        $filePath = storage_path('app/public/' . $path);
                         Excel::store($export, $path, 'public');
 
                         $reportData = [
-                            'report_path' => asset('storage/' . $path),
-                            'report_filename' => 'report.xlsx',
+                            'report_path' => url(Storage::url($path)),
+                            'report_filename' => 'report_' . now()->format('Ymd_His') . '.xlsx',
                         ];
 
                         $textResponse = preg_replace($pattern, '', $textResponse);
@@ -218,12 +217,11 @@ class ChatController extends Controller
 
                             $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
                             $export = new ReportExport($parsedData);
-                            $filePath = storage_path('app/public/' . $path);
                             Excel::store($export, $path, 'public');
 
                             $reportData = [
-                                'report_path' => asset('storage/' . $path),
-                                'report_filename' => 'report.xlsx',
+                                'report_path' => Storage::url($path),
+                                'report_filename' => 'report_' . now()->format('Ymd_His') . '.xlsx',
                             ];
 
                             $textResponse = preg_replace($pattern, '', $textResponse);
@@ -290,7 +288,7 @@ class ChatController extends Controller
             Otherwise, use the business data to intelligently answer user questions.  without appear string 'PHP-style array' in response.
             Always be friendly and identify yourself as Mark.
             - Do not generate a report if the user's input is not clearly related to the business context. Do not generate an empty report.
-            - The response should return in arabic or english only, and based on language input if arabic the response hsould be arabic else if english the response is english";
+            - The response should return in arabic or english only, and Based on the language input, if it is Arabic, the response must be in Arabic, otherwise if it is English, the response must be in English.";
     }
 
 }
