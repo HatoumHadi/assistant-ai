@@ -24,6 +24,9 @@ export default function SignInForm() {
         try {
 
             const API_BASE_URL = import.meta.env.VITE_API_URL || "https://doova.tools";
+            console.log('here', import.meta.env.VITE_API_URL);
+
+
 
             await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
 
@@ -41,8 +44,10 @@ export default function SignInForm() {
                 password,
             }, {
                 headers: {
-                    Accept: "application/json",
-                    "X-XSRF-TOKEN": xsrfToken,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    ...(xsrfToken && { 'X-XSRF-TOKEN': xsrfToken }),
                 },
             });
 

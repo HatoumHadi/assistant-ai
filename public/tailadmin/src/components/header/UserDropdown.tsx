@@ -15,7 +15,7 @@ export default function UserDropdown() {
         try {
             const token = localStorage.getItem('auth_token');
 
-            const API_BASE_URL = import.meta.env.VITE_API_URL || "https://doova.tools";
+            const API_BASE_URL = import.meta.env.VITE_API_URL;
 
             axios.post(`${API_BASE_URL}/api/logout`, {}, {
                 headers: {

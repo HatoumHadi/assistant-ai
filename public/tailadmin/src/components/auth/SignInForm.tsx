@@ -23,7 +23,7 @@ export default function SignInForm() {
 
         try {
 
-            const API_BASE_URL = import.meta.env.VITE_API_URL || "https://doova.tools";
+            const API_BASE_URL = import.meta.env.VITE_API_URL;
 
             await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
 

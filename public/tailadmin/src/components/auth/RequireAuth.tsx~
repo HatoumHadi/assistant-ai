@@ -13,7 +13,7 @@ export default function RequireAuth({ children }: { children: JSX.Element }) {
             return;
         }
 
-        const API_BASE_URL = import.meta.env.VITE_API_URL;
+        const API_BASE_URL = import.meta.env.VITE_API_URL || "https://doova.tools";
 
         axios.get(`${API_BASE_URL}/api/check`, {
             headers: {
