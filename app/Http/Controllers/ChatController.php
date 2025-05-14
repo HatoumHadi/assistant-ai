@@ -74,8 +74,8 @@ class ChatController extends Controller
                         Excel::store($export, $path, 'public');
 
                         $reportData = [
-                            'report_path' => asset('storage/' . $path),
-                            'report_filename' => 'report.xlsx',
+                            'report_path' => Storage::url($path),
+                            'report_filename' => 'report_' . now()->format('Ymd_His') . '.xlsx',
                         ];
 
                         $textResponse = preg_replace($pattern, '', $textResponse);
@@ -218,12 +218,11 @@ class ChatController extends Controller
 
                             $path = 'reports/report_' . now()->format('Ymd_His') . '.xlsx';
                             $export = new ReportExport($parsedData);
-                            $filePath = storage_path('app/public/' . $path);
                             Excel::store($export, $path, 'public');
 
                             $reportData = [
-                                'report_path' => asset('storage/' . $path),
-                                'report_filename' => 'report.xlsx',
+                                'report_path' => url(Storage::url($path)),
+                                'report_filename' => 'report_' . now()->format('Ymd_His') . '.xlsx',
                             ];
 
                             $textResponse = preg_replace($pattern, '', $textResponse);

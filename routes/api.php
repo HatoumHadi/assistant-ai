@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::post('/chat', [ChatController::class, 'chatFn']);
-Route::post('/voice', [ChatController::class, 'handleVoice']);
+Route::post('/chat', [ChatController::class, 'chatFn'])->middleware(['auth:sanctum']);
+Route::post('/voice', [ChatController::class, 'handleVoice'])->middleware(['auth:sanctum']);
 
 
 
@@ -43,5 +43,3 @@ Route::get('/check', function () {
 
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-
-
