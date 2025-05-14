@@ -7,7 +7,6 @@ import {
     ChevronDownIcon,
     GridIcon,
     HorizontaLDots,
-    ListIcon,
     PieChartIcon,
     PlugInIcon,
     TableIcon,
@@ -44,11 +43,6 @@ const navItems: NavItem[] = [
         path: "/profile",
     },
     {
-        name: "Forms",
-        icon: <ListIcon />,
-        subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-    },
-    {
         name: "Tables",
         icon: <TableIcon />,
         subItems: [{ name: "Users", path: "/users", pro: false }],
@@ -60,8 +54,7 @@ const othersItems: NavItem[] = [
         icon: <PieChartIcon />,
         name: "Charts",
         subItems: [
-            { name: "Line Chart", path: "/line-chart", pro: false },
-            { name: "Bar Chart", path: "/bar-chart", pro: false },
+            { name: "PNL Chart", path: "/pnl", pro: false }
         ],
     },
     {

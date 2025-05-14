@@ -1,120 +1,99 @@
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-export default function LineChartOne() {
-  const options: ApexOptions = {
-    legend: {
-      show: false, // Hide legend
-      position: "top",
-      horizontalAlign: "left",
-    },
-    colors: ["#12baab", "#12baab"], // Define line colors
-    chart: {
-      fontFamily: "Outfit, sans-serif",
-      height: 310,
-      type: "line", // Set the chart type to 'line'
-      toolbar: {
-        show: false, // Hide chart toolbar
-      },
-    },
-    stroke: {
-      curve: "straight", // Define the line style (straight, smooth, or step)
-      width: [2, 2], // Line width for each dataset
-    },
+export default function LineChartPNL() {
+    const profitData = [456789, 380000, 412000, 395000, 440000, 470000, 460000, 480000, 500000, 490000, 510000, 530000];
+    const lossData = [12000, 10000, 8000, 9500, 11000, 7000, 6000, 8500, 9000, 7500, 6500, 5000];
 
-    fill: {
-      type: "gradient",
-      gradient: {
-        opacityFrom: 0.55,
-        opacityTo: 0,
-      },
-    },
-    markers: {
-      size: 0, // Size of the marker points
-      strokeColors: "#fff", // Marker border color
-      strokeWidth: 2,
-      hover: {
-        size: 6, // Marker size on hover
-      },
-    },
-    grid: {
-      xaxis: {
-        lines: {
-          show: false, // Hide grid lines on x-axis
+    const options: ApexOptions = {
+        chart: {
+            type: "line",
+            height: 310,
+            toolbar: { show: false },
+            fontFamily: "Outfit, sans-serif",
         },
-      },
-      yaxis: {
-        lines: {
-          show: true, // Show grid lines on y-axis
+        colors: ["#0f9d58", "#d93025"], // Green for profit, Red for loss
+        stroke: {
+            curve: "smooth",
+            width: 4,
         },
-      },
-    },
-    dataLabels: {
-      enabled: false, // Disable data labels
-    },
-    tooltip: {
-      enabled: true, // Enable tooltip
-      x: {
-        format: "dd MMM yyyy", // Format for x-axis tooltip
-      },
-    },
-    xaxis: {
-      type: "category", // Category-based x-axis
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-      axisBorder: {
-        show: false, // Hide x-axis border
-      },
-      axisTicks: {
-        show: false, // Hide x-axis ticks
-      },
-      tooltip: {
-        enabled: false, // Disable tooltip for x-axis points
-      },
-    },
-    yaxis: {
-      labels: {
-        style: {
-          fontSize: "12px", // Adjust font size for y-axis labels
-          colors: ["#6B7280"], // Color of the labels
+        markers: {
+            size: 5,
+            strokeColors: "#fff",
+            strokeWidth: 2,
+            hover: {
+                size: 7,
+            },
         },
-      },
-      title: {
-        text: "", // Remove y-axis title
-        style: {
-          fontSize: "0px",
+        dataLabels: { enabled: false },
+        tooltip: {
+            shared: true,
+            y: {
+                formatter: (val) => `$${val.toLocaleString()}`,
+            },
         },
-      },
-    },
-  };
+        grid: {
+            xaxis: { lines: { show: false } },
+            yaxis: { lines: { show: true } },
+        },
+        xaxis: {
+            type: "category",
+            categories: [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+            ],
+            axisBorder: { show: false },
+            axisTicks: { show: false },
+            tooltip: { enabled: false },
+        },
+        yaxis: [
+            {
+                seriesName: "Profit",
+                title: {
+                    text: "Profit",
+                },
+                labels: {
+                    formatter: (val) => `$${val.toLocaleString()}`,
+                    style: { colors: "#0f9d58" },
+                },
+            },
+            {
+                opposite: true,
+                seriesName: "Loss",
+                title: {
+                    text: "Loss",
+                },
+                labels: {
+                    formatter: (val) => `$${val.toLocaleString()}`,
+                    style: { colors: "#d93025" },
+                },
+            },
+        ],
+        legend: {
+            show: true,
+            position: "top",
+            horizontalAlign: "left",
+        },
+    };
 
-  const series = [
-    {
-      name: "Sales",
-      data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235],
-    },
-    {
-      name: "Revenue",
-      data: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
-    },
-  ];
-  return (
-    <div className="max-w-full overflow-x-auto custom-scrollbar">
-      <div id="chartEight" className="min-w-[1000px]">
-        <Chart options={options} series={series} type="area" height={310} />
-      </div>
-    </div>
-  );
+    const series = [
+        {
+            name: "Profit",
+            type: "line",
+            data: profitData,
+        },
+        {
+            name: "Loss",
+            type: "line",
+            data: lossData,
+        },
+    ];
+
+    return (
+        <div className="max-w-full overflow-x-auto custom-scrollbar">
+            <div id="chartPNL" className="min-w-[1000px]">
+                <Chart options={options} series={series} type="line" height={310} />
+            </div>
+        </div>
+    );
 }

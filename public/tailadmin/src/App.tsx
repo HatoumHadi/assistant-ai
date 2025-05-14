@@ -54,7 +54,7 @@ export default function App() {
                         <Route path="/videos" element={<Videos/>}/>
 
                         {/* Charts */}
-                        <Route path="/line-chart" element={<LineChart/>}/>
+                        <Route path="/pnl" element={<LineChart/>}/>
                         <Route path="/bar-chart" element={<BarChart/>}/>
                     </Route>
 

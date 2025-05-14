@@ -93,14 +93,18 @@ export default function UserAddressCard() {
 
                 <div>
                   <Label>City/State</Label>
-                  <Input type="text" value="SOHO Beirut District, Lebanon" />
+                  <Input type="text" value="Arizona, United States." />
                 </div>
 
                 <div>
                   <Label>Postal Code</Label>
-                  <Input type="text" value="1100" />
+                  <Input type="text" value="ERT 2489" />
                 </div>
 
+                <div>
+                  <Label>TAX ID</Label>
+                  <Input type="text" value="AS4568384" />
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">

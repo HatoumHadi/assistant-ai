@@ -10,9 +10,9 @@ export default function LineChart() {
         title="Admin Dashboard Template"
         description="Admin Dashboard Template"
       />
-      <PageBreadcrumb pageTitle="Line Chart" />
+      <PageBreadcrumb pageTitle="PNL" />
       <div className="space-y-6">
-        <ComponentCard title="Line Chart 1">
+        <ComponentCard title="PNL">
           <LineChartOne />
         </ComponentCard>
       </div>

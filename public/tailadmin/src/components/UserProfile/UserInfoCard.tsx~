@@ -118,7 +118,7 @@ export default function UserInfoCard() {
 
                   <div>
                     <Label>X.com</Label>
-                    <Input type="text" value="https://x.com/doova.ai" />
+                    <Input type="text" value="https://x.com/PimjoHQ" />
                   </div>
 
                   <div>
