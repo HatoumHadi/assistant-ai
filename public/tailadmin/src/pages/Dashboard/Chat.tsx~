@@ -112,12 +112,6 @@ export default function Chat() {
 
 
     const startRecording = async () => {
-
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            console.error("Browser does not support audio recording or microphone access.");
-            return;
-        }
-
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const chunks: Blob[] = [];

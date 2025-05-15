@@ -41,7 +41,6 @@ export default function SignInForm() {
                 password,
             }, {
                 headers: {
-                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
                     ...(xsrfToken && { 'X-XSRF-TOKEN': xsrfToken }),
