@@ -19,7 +19,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://doova.tools'],
+    'allowed_origins' => [
+        'https://doova.tools',
+        'https://www.doova.tools',
+    ],
 
     'allowed_origins_patterns' => [],
 
