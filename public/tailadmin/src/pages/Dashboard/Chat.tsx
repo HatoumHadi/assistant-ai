@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import PageMeta from "../../components/common/PageMeta";
 import { FiMic, FiStopCircle } from "react-icons/fi";
 import axios from "axios";
+import ReactMarkdown from 'react-markdown';
 
 export default function Chat() {
     const [input, setInput] = useState("");
@@ -244,7 +245,7 @@ export default function Chat() {
             <PageMeta title="AI Chat" description="Ask questions and get AI responses on this page." />
             <div className="grid grid-cols-12 gap-4 md:gap-6">
                 <div className="col-span-12 md:col-span-10 md:col-start-2 bg-white dark:bg-gray-900 shadow-md rounded-none md:rounded-xl h-[80vh] flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 text-sm md:text-base">
-                {/* Header */}
+                    {/* Header */}
                     <div className="p-3 md:p-4 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white font-semibold border-b border-gray-300 dark:border-gray-800">
                         AI Assistant Chat
                     </div>
@@ -254,7 +255,7 @@ export default function Chat() {
                         {messages.map((msg, index) => (
                             <div key={index} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} mx-1 md:mx-0`}>
                                 <div className={`px-3 py-2 md:px-4 md:py-2 rounded-lg max-w-[85%] md:max-w-[70%] leading-relaxed text-sm ${msg.sender === "user" ? "bg-[#12baab] text-white" : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white"}`}>
-                                    <div>{msg.text}</div>
+                                    <ReactMarkdown>{msg.text}</ReactMarkdown>
                                     {msg.fileUrl && (
                                         <div className="mt-2">
                                             <button
@@ -268,12 +269,18 @@ export default function Chat() {
                                 </div>
                             </div>
                         ))}
-                        {loading && <div className="text-gray-500 italic text-sm">AI is typing...</div>}
-                        <div ref={messagesEndRef} />
+                        {loading && <div className="space-y-2 animate-pulse">
+                            <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                            <div className="h-4 bg-gray-300 rounded w-4/6"></div>
+                            <div className="h-4 bg-gray-300 rounded w-3/6"></div>
+                        </div>
+                        }
+                        <div ref={messagesEndRef}/>
                     </div>
 
                     {/* Input Area */}
-                    <div className="px-2 md:px-4 py-2 md:py-3 bg-white dark:bg-gray-900 dark:text-white border-t border-gray-300 dark:border-gray-800 flex items-center gap-2">
+                    <div
+                        className="px-2 md:px-4 py-2 md:py-3 bg-white dark:bg-gray-900 dark:text-white border-t border-gray-300 dark:border-gray-800 flex items-center gap-2">
                         {isRecording ? (
                             <div className="flex-1 px-3 md:px-4 py-2 bg-gray-400 dark:bg-gray-800 rounded-lg text-gray-800 dark:text-white text-sm">
                                 🎙️ Recording... {formatTime(recordTime)}
