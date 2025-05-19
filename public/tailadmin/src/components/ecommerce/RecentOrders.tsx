@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
     Table,
     TableBody,
@@ -66,6 +68,12 @@ const tableData: Product[] = [
 ];
 
 export default function RecentOrders() {
+    const [filter, setFilter] = useState<"daily" | "weekly">("weekly");
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const filteredData =
+        filter === "daily" ? tableData.slice(0, 2) : tableData;
+
     return (
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
             <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
@@ -73,13 +81,42 @@ export default function RecentOrders() {
                     Recent Orders
                 </h3>
 
-                <div className="flex items-center gap-3">
-                    <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+                <div className="relative">
+                    <button
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                        className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+                    >
                         Filter
                     </button>
-                    <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-                        See all
-                    </button>
+
+                    {dropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 z-10">
+                            <ul className="text-sm text-gray-700 dark:text-gray-200">
+                                <li>
+                                    <button
+                                        className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-white/[0.05] text-left"
+                                        onClick={() => {
+                                            setFilter("daily");
+                                            setDropdownOpen(false);
+                                        }}
+                                    >
+                                        Daily
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-white/[0.05] text-left"
+                                        onClick={() => {
+                                            setFilter("weekly");
+                                            setDropdownOpen(false);
+                                        }}
+                                    >
+                                        Weekly
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -115,7 +152,7 @@ export default function RecentOrders() {
                     </TableHeader>
 
                     <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-                        {tableData.map((product) => (
+                        {filteredData.map((product) => (
                             <TableRow key={product.id}>
                                 <TableCell className="py-3">
                                     <div className="flex items-center gap-3">
@@ -131,8 +168,8 @@ export default function RecentOrders() {
                                                 {product.name}
                                             </p>
                                             <span className="text-gray-500 text-theme-xs dark:text-gray-400">
-                        {product.variants}
-                      </span>
+                                                {product.variants}
+                                            </span>
                                         </div>
                                     </div>
                                 </TableCell>
