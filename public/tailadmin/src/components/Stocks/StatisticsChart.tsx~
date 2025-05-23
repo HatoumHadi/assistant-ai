@@ -2,7 +2,7 @@ import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { useState } from "react";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
-// import { MoreDotIcon } from "../../icons";
+import { MoreDotIcon } from "../../icons";
 
 type RangeKey = "Monthly" | "Quarterly" | "Annually";
 
@@ -135,9 +135,9 @@ export const StockPerformance = () => {
                         )}
                     </div>
 
-                    {/*<button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">*/}
-                    {/*    <MoreDotIcon />*/}
-                    {/*</button>*/}
+                    <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+                        <MoreDotIcon />
+                    </button>
                 </div>
             </div>
 

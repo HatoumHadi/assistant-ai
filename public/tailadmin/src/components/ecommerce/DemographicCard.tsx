@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
-import { MoreDotIcon } from "../../icons";
+// import { MoreDotIcon } from "../../icons";
 import CountryMap from "./CountryMap";
 
 export default function DemographicCard() {
     const [isOpen, setIsOpen] = useState(false);
 
-    function toggleDropdown() {
-        setIsOpen(!isOpen);
-    }
+    // function toggleDropdown() {
+    //     setIsOpen(!isOpen);
+    // }
 
     function closeDropdown() {
         setIsOpen(false);
@@ -18,7 +18,7 @@ export default function DemographicCard() {
     const countries = [
         {
             name: "USA",
-            flag: "/storage/images/country/country-02.svg",
+            flag: "/storage/images/country/country-01.svg",
             customers: 3200,
             percentage: 42,
         },
@@ -60,9 +60,9 @@ export default function DemographicCard() {
                     </p>
                 </div>
                 <div className="relative inline-block">
-                    <button className="dropdown-toggle" onClick={toggleDropdown}>
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
-                    </button>
+                    {/*<button className="dropdown-toggle" onClick={toggleDropdown}>*/}
+                    {/*    <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />*/}
+                    {/*</button>*/}
                     <Dropdown
                         isOpen={isOpen}
                         onClose={closeDropdown}
@@ -87,7 +87,7 @@ export default function DemographicCard() {
             <div className="px-4 py-6 my-6 overflow-hidden border border-gray-200 rounded-2xl dark:border-gray-800 sm:px-6">
                 <div
                     id="mapOne"
-                    className="mapOne map-btn -mx-4 -my-6 h-[212px] w-[252px] 2xsm:w-[307px] xsm:w-[358px] sm:-mx-6 md:w-[668px] lg:w-[634px] xl:w-[393px] 2xl:w-[554px]"
+                    className="mapOne map-btn -mx-4 -my-6 h-[212px] w-[252px] 2xsm:w-[307px] xsm:w-[358px] sm:-mx-6 md:w-[668px] lg:w-[800px] xl:w-[425px] 2xl:w-[554px]"
                 >
                     <CountryMap />
                 </div>

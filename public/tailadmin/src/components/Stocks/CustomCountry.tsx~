@@ -1,0 +1,100 @@
+// react plugin for creating vector maps
+import { VectorMap } from "@react-jvectormap/core";
+import { worldMill } from "@react-jvectormap/world";
+
+// Define the component props
+interface CountryMapProps {
+    mapColor?: string;
+}
+
+const CountryMap: React.FC<CountryMapProps> = ({ mapColor }) => {
+    return (
+        <VectorMap
+            map={worldMill}
+            backgroundColor="transparent"
+            focusOn={{
+                x: 0.57, // Adjusted to center Lebanon
+                y: 0.45,
+                scale: 20, // Zoom level to focus on Lebanon
+                animate: true,
+            }}
+            markerStyle={{
+                initial: {
+                    fill: "#12baab",
+                    r: 5,
+                } as any,
+            }}
+            markersSelectable={true}
+            markers={[
+                {
+                    latLng: [33.8938, 35.5018], // Beirut
+                    name: "Beirut Branch",
+                    style: {
+                        fill: "#12baab",
+                        borderColor: "white",
+                        borderWidth: 1,
+                    },
+                },
+                {
+                    latLng: [34.4367, 35.8497], // Tripoli
+                    name: "Tripoli Branch",
+                    style: {
+                        fill: "#12baab",
+                        borderColor: "white",
+                        borderWidth: 1,
+                    },
+                },
+                {
+                    latLng: [33.2700, 35.2033], // Sidon
+                    name: "Sidon Branch",
+                    style: {
+                        fill: "#12baab",
+                        borderColor: "white",
+                        borderWidth: 1,
+                    },
+                },
+                {
+                    latLng: [33.8547, 35.9875], // Baalbek
+                    name: "Baalbek Branch",
+                    style: {
+                        fill: "#12baab",
+                        borderColor: "white",
+                        borderWidth: 1,
+                    },
+                },
+            ]}
+            zoomOnScroll={false}
+            zoomMax={12}
+            zoomMin={1}
+            zoomAnimate={true}
+            zoomStep={1.5}
+            regionStyle={{
+                initial: {
+                    fill: mapColor || "#D0D5DD",
+                    fillOpacity: 1,
+                    fontFamily: "Outfit",
+                    stroke: "none",
+                    strokeWidth: 0,
+                },
+                hover: {
+                    fillOpacity: 0.7,
+                    cursor: "pointer",
+                    fill: "#12baab",
+                },
+                selected: {
+                    fill: "#12baab",
+                },
+            }}
+            regionLabelStyle={{
+                initial: {
+                    fill: "#35373e",
+                    fontWeight: 500,
+                    fontSize: "13px",
+                    stroke: "none",
+                },
+            }}
+        />
+    );
+};
+
+export default CountryMap;

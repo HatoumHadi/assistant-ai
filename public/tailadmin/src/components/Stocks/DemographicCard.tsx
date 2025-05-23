@@ -1,3 +1,5 @@
+import CustomerCountry from "./CustomCountry";
+
 export default function DemographicCard() {
 
     return (
@@ -13,12 +15,12 @@ export default function DemographicCard() {
                 </div>
             </div>
 
-            {/*/!* Full Map Section *!/*/}
-            {/*<div className="my-6 h-[300px] w-full overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800">*/}
-            {/*    <div id="mapOne" className="h-full w-full">*/}
-            {/*        <CountryMap />*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+            {/* Full Map Section */}
+            <div className="my-6 h-[300px] w-full overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800">
+                <div id="mapOne" className="h-full w-full">
+                    <CustomerCountry />
+                </div>
+            </div>
 
             {/* Country Stats */}
             <div className="space-y-5 mt-4">
