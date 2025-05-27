@@ -23,16 +23,17 @@ function BranchTab({ selectedBranch, onChange }: { selectedBranch: number; onCha
     );
 }
 
-const INVENTORY_DATA: Record<number, number[]> = {
-    1: [120, 85, 75, 60, 90],
-    2: [95, 110, 65, 80, 70],
-    3: [80, 75, 100, 55, 85],
-    4: [105, 90, 80, 70, 95]
+// Fixed revenue data per branch (in dollars)
+const REVENUE_DATA: Record<number, number[]> = {
+    1: [12500, 9800, 14500, 12000, 13000],
+    2: [11500, 10500, 13800, 11000, 12500],
+    3: [13500, 9900, 12800, 10000, 14000],
+    4: [12000, 10200, 13400, 11500, 12700],
 };
 
 const CATEGORIES = ["Sofas", "Beds", "Chairs", "Tables", "Cabinets"];
 
-export default function InventoryBreakdownChart() {
+export default function RevenueByCategoryChart() {
     const [selectedBranch, setSelectedBranch] = useState(1);
     const [loading, setLoading] = useState(true);
 
@@ -64,29 +65,15 @@ export default function InventoryBreakdownChart() {
                 enabled: loading
             }
         },
-        plotOptions: {
-            pie: {
-                startAngle: -90,
-                endAngle: 270,
-                expandOnClick: true,
-                donut: {
-                    size: '65%',
-                    background: 'transparent',
-                    labels: {
-                        show: false
-                    }
-                }
-            }
-        },
         labels: CATEGORIES,
-        colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+        colors: ["#34d399", "#60a5fa", "#fbbf24", "#f472b6", "#a78bfa"],
         fill: {
             type: 'gradient',
             gradient: {
                 shade: 'dark',
                 type: 'horizontal',
                 shadeIntensity: 0.5,
-                gradientToColors: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                gradientToColors: ['#34d399', '#60a5fa', '#fbbf24', '#f472b6', '#a78bfa'],
                 inverseColors: true,
                 opacityFrom: 0.8,
                 opacityTo: 1,
@@ -125,7 +112,7 @@ export default function InventoryBreakdownChart() {
                 const label = w.globals.labels[seriesIndex];
                 const value = series[seriesIndex];
                 return `<div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-                          <strong class="text-gray-800 dark:text-white">${label}</strong>: <span class="font-semibold text-[#12baab]">${value} items</span>
+                          <strong class="text-gray-800 dark:text-white">${label}</strong>: <span class="font-semibold text-[#12baab]">$${value.toLocaleString()}</span>
                         </div>`;
             },
         },
@@ -145,10 +132,10 @@ export default function InventoryBreakdownChart() {
             <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
                 <div className="w-full">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        Inventory Breakdown
+                        Revenue by Category
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Items in stock per category (Branch {selectedBranch})
+                        Revenue breakdown by furniture type (Branch {selectedBranch})
                     </p>
                 </div>
                 <div className="flex items-start w-full gap-3 sm:justify-end">
@@ -166,7 +153,7 @@ export default function InventoryBreakdownChart() {
                         <Chart
                             key={selectedBranch}
                             options={options}
-                            series={INVENTORY_DATA[selectedBranch]}
+                            series={REVENUE_DATA[selectedBranch]}
                             type="pie"
                             height={310}
                         />

@@ -10,6 +10,11 @@ import CashflowOverview from "../../components/ecommerce/CashflowOverview";
 import BestSellingItems from "../../components/ecommerce/BestSellingItems";
 import KpiIndicators from "../../components/ecommerce/KpiIndicators";
 import InventoryBreakdownChart from "../../components/ecommerce/InventoryBreakDownChart.tsx";
+import SeasonalDemandChart from "../../components/ecommerce/SeasonalDemondChart.tsx";
+import CustomerSatisfactionChart from "../../components/ecommerce/CustomerSatisfactionChart.tsx";
+import ReturnReasonChart from "../../components/ecommerce/ReturnReasonChart.tsx";
+import DeliveryTimeHistogram from "../../components/ecommerce/DelivaryTimeHistogram.tsx";
+import RevenueByCategory from "../../components/ecommerce/RevenueByCategory.tsx";
 
 export default function Home() {
     return (
@@ -23,6 +28,11 @@ export default function Home() {
                 <div className="col-span-12">
                     <InventoryBreakdownChart/>
                 </div>
+
+                <div className="col-span-12">
+                    <SeasonalDemandChart/>
+                </div>
+
                 <div className="col-span-12 space-y-6 xl:col-span-7">
                     <EcommerceMetrics/>
 
@@ -56,6 +66,21 @@ export default function Home() {
                 </div>
                 <div className="col-span-12">
                     <KpiIndicators/>
+                </div>
+                <div className="col-span-12">
+                    <CustomerSatisfactionChart/>
+                </div>
+
+                <div className="col-span-12">
+                    <ReturnReasonChart/>
+                </div>
+
+                <div className="col-span-12">
+                    <DeliveryTimeHistogram/>
+                </div>
+
+                <div className="col-span-12">
+                    <RevenueByCategory/>
                 </div>
             </div>
         </>
