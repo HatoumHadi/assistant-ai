@@ -8,8 +8,9 @@ import PageMeta from "../components/common/PageMeta";
 
 interface CalendarEvent extends EventInput {
     extendedProps: {
-        calendar: string;
-        soldCount: number;
+        calendar: string; // color name, e.g., "Danger"
+        branch: number;   // branch number, e.g., 1, 2, 3, 4
+        containerCount: number; // number of containers arrived
     };
 }
 
@@ -18,26 +19,52 @@ const Calendar: React.FC = () => {
     const calendarRef = useRef<FullCalendar>(null);
 
     useEffect(() => {
-        // Example items sold per day
+        const today = new Date();
+        const toDateString = (date: Date) => date.toISOString().split("T")[0];
+
+        // Sample data: containers arriving at branches on different days
         setEvents([
             {
                 id: "1",
-                title: "5 items sold",
-                start: new Date().toISOString().split("T")[0],
-                extendedProps: { calendar: "Danger", soldCount: 5 },
+                title: "2 containers arrived at Branch 1",
+                start: toDateString(today),
+                extendedProps: { calendar: "Danger", branch: 1, containerCount: 2 },
             },
             {
                 id: "2",
-                title: "3 items sold",
-                start: new Date(Date.now() + 86400000).toISOString().split("T")[0],
-                extendedProps: { calendar: "Success", soldCount: 3 },
+                title: "1 container arrived at Branch 2",
+                start: toDateString(new Date(today.getTime() + 86400000)),
+                extendedProps: { calendar: "Success", branch: 2, containerCount: 1 },
             },
             {
                 id: "3",
-                title: "10 items sold",
-                start: new Date(Date.now() + 2 * 86400000).toISOString().split("T")[0],
-                end: new Date(Date.now() + 3 * 86400000).toISOString().split("T")[0],
-                extendedProps: { calendar: "Primary", soldCount: 10 },
+                title: "4 containers arrived at Branch 3",
+                start: toDateString(new Date(today.getTime() + 2 * 86400000)),
+                extendedProps: { calendar: "Primary", branch: 3, containerCount: 4 },
+            },
+            {
+                id: "4",
+                title: "3 containers arrived at Branch 1",
+                start: toDateString(new Date(today.getTime() + 3 * 86400000)),
+                extendedProps: { calendar: "Warning", branch: 1, containerCount: 3 },
+            },
+            {
+                id: "5",
+                title: "2 containers arrived at Branch 4",
+                start: toDateString(new Date(today.getTime() + 4 * 86400000)),
+                extendedProps: { calendar: "Info", branch: 4, containerCount: 2 },
+            },
+            {
+                id: "6",
+                title: "1 container arrived at Branch 2",
+                start: toDateString(new Date(today.getTime() + 5 * 86400000)),
+                extendedProps: { calendar: "Secondary", branch: 2, containerCount: 1 },
+            },
+            {
+                id: "7",
+                title: "2 containers arrived at Branch 3",
+                start: toDateString(new Date(today.getTime() + 5 * 86400000)),
+                extendedProps: { calendar: "Primary", branch: 3, containerCount: 2 },
             },
         ]);
     }, []);
@@ -69,16 +96,14 @@ const Calendar: React.FC = () => {
 };
 
 const renderEventContent = (eventInfo: any) => {
-    const soldCount = eventInfo.event.extendedProps?.soldCount ?? 0;
-    const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar?.toLowerCase()}`;
+    const { containerCount, branch, calendar } = eventInfo.event.extendedProps;
+    const colorClass = `fc-bg-${calendar?.toLowerCase()}`;
 
     return (
-        <div
-            className={`event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm`}
-        >
+        <div className={`event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm`}>
             <div className="fc-daygrid-event-dot"></div>
             <div className="fc-event-title">
-                {soldCount} items sold
+                {containerCount} container{containerCount > 1 ? "s" : ""} arrived at Branch {branch}
             </div>
         </div>
     );
