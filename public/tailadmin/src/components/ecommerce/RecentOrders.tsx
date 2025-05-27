@@ -68,11 +68,15 @@ const tableData: Product[] = [
 ];
 
 export default function RecentOrders() {
-    const [filter, setFilter] = useState<"daily" | "weekly">("weekly");
+    const [filter, setFilter] = useState<"daily" | "weekly" | "yearly">("weekly");
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const filteredData =
-        filter === "daily" ? tableData.slice(0, 2) : tableData;
+        filter === "daily"
+            ? tableData.slice(0, 2)
+            : filter === "yearly"
+                ? tableData
+                : tableData.slice(0, 4);
 
     return (
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
@@ -112,6 +116,17 @@ export default function RecentOrders() {
                                         }}
                                     >
                                         Weekly
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-white/[0.05] text-left"
+                                        onClick={() => {
+                                            setFilter("yearly");
+                                            setDropdownOpen(false);
+                                        }}
+                                    >
+                                        Yearly
                                     </button>
                                 </li>
                             </ul>

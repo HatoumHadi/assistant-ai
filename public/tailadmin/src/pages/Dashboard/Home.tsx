@@ -30,6 +30,10 @@ export default function Home() {
                 </div>
 
                 <div className="col-span-12">
+                    <RevenueByCategory/>
+                </div>
+
+                <div className="col-span-12">
                     <SeasonalDemandChart/>
                 </div>
 
@@ -79,9 +83,6 @@ export default function Home() {
                     <DeliveryTimeHistogram/>
                 </div>
 
-                <div className="col-span-12">
-                    <RevenueByCategory/>
-                </div>
             </div>
         </>
     );

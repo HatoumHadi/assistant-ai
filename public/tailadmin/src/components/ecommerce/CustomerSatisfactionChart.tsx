@@ -24,9 +24,9 @@ export default function CustomerSatisfactionChart() {
                 colors: ["#fff"]
             },
         },
-        colors: ["#00C49F", "#FFBB28", "#FF4C4C"], // Promoters, Passives, Detractors
+        colors: ["#00C49F", "#FFBB28", "#FF4C4C"], // Supporters, Indifferent, Critics
         xaxis: {
-            categories: ["Promoters", "Passives", "Detractors"],
+            categories: ["Supporters", "Indifferent", "Critics"],
             labels: {
                 style: {
                     fontSize: "14px",
@@ -75,7 +75,7 @@ export default function CustomerSatisfactionChart() {
                         Customer Satisfaction (NPS)
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Measures the percentage of promoters, passives, and detractors based on recent survey results.
+                        Measures the percentage of Supporters, Indifferent, and Critics based on recent survey results.
                     </p>
                 </div>
             </div>
