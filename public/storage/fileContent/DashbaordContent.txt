@@ -148,12 +148,12 @@ when hovering over each seasonal bar, making it easy to compare performance betw
 
 'Customer Satisfaction (NPS)':
 The Customer Satisfaction Chart is a bar graph that visually represents the Net Promoter Score (NPS) based on recent survey responses.
-It categorizes customers into three groups: Promoters, Passives, and Detractors. According to the chart, 68% of customers are Promoters,
-indicating a high level of satisfaction and loyalty toward the service or product. Promoters are customers who are most likely to recommend
-the company to others. Passives make up 20% of the respondents; these customers are moderately satisfied but not enthusiastic enough to promote the brand,
- making them vulnerable to switching to competitors. Finally, 12% of customers are Detractors,
+It categorizes customers into three groups: Supporters, Indifferent, and Critics. According to the chart, 68% of customers are Supporters,
+indicating a high level of satisfaction and loyalty toward the service or product. Supporters are customers who are most likely to recommend
+the company to others. Indifferent make up 20% of the respondents; these customers are moderately satisfied but not enthusiastic enough to promote the brand,
+ making them vulnerable to switching to competitors. Finally, 12% of customers are Critics,
  which means they are dissatisfied and may negatively impact the brand through unfavorable word-of-mouth. The chart uses vibrant,
- distinctive colors—green for Promoters, yellow for Passives, and red for Detractors—to clearly distinguish between each category.
+ distinctive colors—green for Supporters, yellow for Indifferent, and red for Critics—to clearly distinguish between each category.
  The values are displayed as percentages, both on the bars and in tooltips when hovering over each bar.
  This chart helps businesses understand customer loyalty and satisfaction at a glance,
  making it easier to prioritize improvements and customer engagement strategies based on feedback distribution.
