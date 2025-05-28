@@ -1,4 +1,4 @@
-import ChartTab from "../common/ChartTab";
+// import ChartTab from "../common/ChartTab";
 
 export default function StatisticsChart() {
     // Dummy furniture inventory data
@@ -20,9 +20,9 @@ export default function StatisticsChart() {
                         Overview of current furniture availability
                     </p>
                 </div>
-                <div className="flex items-start w-full gap-3 sm:justify-end">
-                    <ChartTab />
-                </div>
+                {/*<div className="flex items-start w-full gap-3 sm:justify-end">*/}
+                {/*    <ChartTab />*/}
+                {/*</div>*/}
             </div>
 
             <div className="max-w-full overflow-x-auto custom-scrollbar">

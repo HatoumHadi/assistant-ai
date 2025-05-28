@@ -1,25 +1,44 @@
+import  { useState } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import ChartTab from "../common/ChartTab";
 
 export default function SalesChart() {
+    const [selected, setSelected] = useState<"optionOne" | "optionTwo" | "optionThree">("optionOne");
+
+    const chartData = {
+        optionOne: {
+            categories: [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            ],
+            series: [95000, 112000, 121000, 135000, 149000, 160000, 142000, 138000, 151000, 172000, 183000, 195000],
+            label: "Monthly revenue trends from furniture sales in 2024",
+        },
+        optionTwo: {
+            categories: ["Q1", "Q2", "Q3", "Q4"],
+            series: [328000, 444000, 431000, 550000], // Aggregated quarterly data
+            label: "Quarterly revenue trends from furniture sales in 2024",
+        },
+        optionThree: {
+            categories: ["2022", "2023", "2024"],
+            series: [1200000, 1380000, 1650000], // Yearly totals
+            label: "Annual revenue trends from furniture sales",
+        }
+    };
+
+    const selectedData = chartData[selected];
+
     const options: ApexOptions = {
         chart: {
             type: "area",
             height: 310,
-            toolbar: {
-                show: false,
-            },
+            toolbar: { show: false },
             fontFamily: "Outfit, sans-serif",
         },
-        colors: ["#FF5733"], // Warm tone for furniture sales trend
-        dataLabels: {
-            enabled: false,
-        },
-        stroke: {
-            curve: "smooth",
-            width: 2,
-        },
+        colors: ["#FF5733"],
+        dataLabels: { enabled: false },
+        stroke: { curve: "smooth", width: 2 },
         fill: {
             type: "gradient",
             gradient: {
@@ -31,10 +50,7 @@ export default function SalesChart() {
         },
         xaxis: {
             type: "category",
-            categories: [
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-            ],
+            categories: selectedData.categories,
             axisBorder: { show: false },
             axisTicks: { show: false },
         },
@@ -57,28 +73,13 @@ export default function SalesChart() {
             xaxis: { lines: { show: false } },
             yaxis: { lines: { show: true } },
         },
-        legend: {
-            show: false,
-        },
+        legend: { show: false },
     };
 
     const series = [
         {
             name: "Total Revenue",
-            data: [
-                95000,   // Jan
-                112000,  // Feb
-                121000,  // Mar
-                135000,  // Apr
-                149000,  // May
-                160000,  // Jun
-                142000,  // Jul
-                138000,  // Aug
-                151000,  // Sep
-                172000,  // Oct
-                183000,  // Nov
-                195000   // Dec
-            ],
+            data: selectedData.series,
         },
     ];
 
@@ -90,11 +91,11 @@ export default function SalesChart() {
                         Furniture Sales Overview
                     </h3>
                     <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                        Monthly revenue trends from furniture sales in 2024
+                        {selectedData.label}
                     </p>
                 </div>
                 <div className="flex items-start w-full gap-3 sm:justify-end">
-                    <ChartTab />
+                    <ChartTab selected={selected} onChange={setSelected} />
                 </div>
             </div>
 

@@ -32,30 +32,24 @@ with sales data ranging from 50 to 300 units across the months of **January to D
 with peaks suggesting high sales periods and dips indicating slower months.
 
 
-The **Furniture Sales Overview** presents the monthly revenue trends for furniture sales throughout 2024,
-displaying percentage-based growth or decline in revenue compared to a baseline. The y-axis represents revenue percentages ranging from **$80% to $200%**,
-while the x-axis lists each month from **January to December**. The graph illustrates fluctuations in revenue performance,
-with peaks and dips indicating periods of strong sales or potential slowdowns. The **total revenue for the year** is reported as **$162,000 USD**,
-providing a clear benchmark for annual performance. Additionally, the dashboard includes filtering options for viewing data by **Monthly, Quarterly,
-or Annually**, allowing for flexible analysis of sales trends over different timeframes. This data enables a detailed examination of revenue patterns,
-helping to identify seasonal trends, evaluate marketing effectiveness, and make informed business decisions. For deeper insights,
-the percentage values (e.g., $200% peak) should be correlated with actual sales figures to assess growth rates and profitability accurately.
-The combination of visual trends and total revenue metrics offers a comprehensive view of the business's financial performance,
-supporting strategic planning and forecasting.
+The Furniture Sales Overview provides a detailed breakdown of revenue trends throughout 2024, starting with a month-by-month analysis.
+In January, revenue stood at $95,000, rising to $112,000 in February and reaching $121,000 in March, indicating strong momentum in Q1.
+April recorded $135,000, followed by $149,000 in May and a further increase to $160,000 in June, marking the most profitable month in the
+first half of the year. In July, revenue slightly declined to $142,000, then dipped again in August to $138,000, before recovering to $151,000
+in September. The final quarter showed the strongest performance, with $172,000 in October, $183,000 in November, and peaking at $195,000 in December.
+Quarterly figures reflect this progression clearly: Q1 (Jan–Mar) totaled $328,000, Q2 (Apr–Jun) climbed to $444,000, Q3 (Jul–Sep) generated $431,000,
+and Q4 (Oct–Dec) led with $550,000 in revenue. On an annual basis, total revenue for 2024 reached $1,650,000, representing substantial growth compared
+to $1,380,000 in 2023 and $1,200,000 in 2022. This growth trajectory underscores consistent year-over-year performance improvement.
+The dashboard's ability to toggle between Monthly, Quarterly, and Annually allows users to explore trends at varying granularity,
+offering deep insight into seasonal patterns, campaign impacts, and overall business health, ultimately supporting more informed strategy and
+decision-making.
 
 
 
-The **Best-Selling Furniture** dashboard displays the ranking of furniture items by total units sold,
-with the data visualization showing a bar chart where the y-axis represents units sold (ranging from 0 to 400) and
-the x-axis lists the product categories: **Sofa Set**, **Dining Table**, **Office Chair**, **Bookshelf**, and **TV Stand**.
-The Sofa Set leads in sales with approximately **400 units sold**, followed by the Dining Table at around **300 units**.
-The Office Chair and Bookshelf show similar performance, with roughly **200 units each**,
-while the TV Stand has the lowest sales volume at about **100 units**. The dashboard includes filtering options to view this data **Monthly**,
-**Quarterly**, or **Annually**, allowing for flexible analysis of sales trends over different time periods.
-This information helps identify top-performing products, assess demand patterns, and optimize inventory and marketing strategies accordingly.
-The Sofa Set's dominant position suggests strong customer preference,
-while the lower sales of the TV Stand may indicate a need for promotional efforts or product reevaluation. By comparing these figures with revenue data,
-businesses can further analyze profitability per product category and make data-driven decisions to enhance overall sales performance.
+The Best-Selling Furniture dashboard presents a dynamic bar chart comparing total units sold across key furniture categories. The x-axis displays five main product types: Sofa Set, Dining Table, Office Chair, Bookshelf, and TV Stand, while the y-axis reflects the quantity sold, with values varying based on the selected time period—Monthly, Quarterly, or Annually.
+By default (Monthly), Sofa Sets lead with approximately 320 units sold, followed by Dining Tables at 250 units, Office Chairs at 180 units, Bookshelves at 120 units, and TV Stands with 90 units. Switching to Quarterly view adjusts these figures to 850, 630, 500, 320, and 250 units respectively, while the Annual view highlights broader trends with 3200, 2650, 1940, 1450, and 1100 units sold.
+The toggle feature allows users to seamlessly explore performance trends over different time frames, making it easier to track seasonal patterns and long-term growth. The consistently high sales of Sofa Sets across all views indicate strong, sustained customer demand. In contrast, lower sales for TV Stands may prompt reassessment of marketing or product offerings in that category.
+This dashboard empowers decision-makers to pinpoint top-performing products, monitor inventory movement, and tailor sales strategies with data-backed insights.
 
 
 

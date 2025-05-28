@@ -1,6 +1,6 @@
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import ChartTab from "../common/ChartTab";
+// import ChartTab from "../common/ChartTab";
 
 export default function StatisticsChart() {
     // Define sales data for different furniture items over the months
@@ -114,9 +114,9 @@ export default function StatisticsChart() {
                         Monthly sales performance for different furniture products
                     </p>
                 </div>
-                <div className="flex items-start w-full gap-3 sm:justify-end">
-                    <ChartTab />
-                </div>
+                {/*<div className="flex items-start w-full gap-3 sm:justify-end">*/}
+                {/*    <ChartTab />*/}
+                {/*</div>*/}
             </div>
 
             <div className="max-w-full overflow-x-auto custom-scrollbar">

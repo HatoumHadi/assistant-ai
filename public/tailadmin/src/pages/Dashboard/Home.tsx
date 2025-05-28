@@ -56,15 +56,17 @@ export default function Home() {
                 </div>
 
                 <div className="col-span-12">
+                    <CashflowOverview/>
+                </div>
+
+                <div className="col-span-12">
                     <StatisticsChart/>
                 </div>
 
                 {/*<div className="col-span-12">*/}
                 {/*    <InventoryStatus/>*/}
                 {/*</div>*/}
-                <div className="col-span-12">
-                    <CashflowOverview/>
-                </div>
+
                 <div className="col-span-12">
                     <BestSellingItems/>
                 </div>
